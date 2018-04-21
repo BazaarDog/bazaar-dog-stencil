@@ -28,15 +28,22 @@ import '@ionic/core';
 import '@stencil/router';
 
 import {
-  Bar,
-  Beer,
-} from './global/interfaces';
-import {
   RouterHistory,
 } from '@stencil/router';
 import {
   EventEmitter,
 } from '@stencil/core';
+import {
+  Listing,
+  ListingCard,
+  Map,
+  Profile,
+  Thumbnails,
+} from './global/interfaces';
+import {
+  SearchOptionInterface,
+  SearchProvider,
+} from './global/interfaces-app';
 
 declare global {
   interface HTMLAmRatingElement extends HTMLStencilElement {
@@ -191,196 +198,27 @@ declare global {
 
 
 declare global {
-  interface HTMLBarDirectionsElement extends HTMLStencilElement {
-    'address': string;
-    'dest': string;
+  interface HTMLBazaarDogStencilElement extends HTMLStencilElement {
+
   }
-  var HTMLBarDirectionsElement: {
-    prototype: HTMLBarDirectionsElement;
-    new (): HTMLBarDirectionsElement;
+  var HTMLBazaarDogStencilElement: {
+    prototype: HTMLBazaarDogStencilElement;
+    new (): HTMLBazaarDogStencilElement;
   };
   interface HTMLElementTagNameMap {
-    'bar-directions': HTMLBarDirectionsElement;
+    'bazaar-dog-stencil': HTMLBazaarDogStencilElement;
   }
   interface ElementTagNameMap {
-    'bar-directions': HTMLBarDirectionsElement;
+    'bazaar-dog-stencil': HTMLBazaarDogStencilElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      'bar-directions': JSXElements.BarDirectionsAttributes;
+      'bazaar-dog-stencil': JSXElements.BazaarDogStencilAttributes;
     }
   }
   namespace JSXElements {
-    export interface BarDirectionsAttributes extends HTMLAttributes {
-      'address'?: string;
-      'dest'?: string;
-    }
-  }
-}
+    export interface BazaarDogStencilAttributes extends HTMLAttributes {
 
-
-declare global {
-  interface HTMLBarListElement extends HTMLStencilElement {
-    'bars': Array<Bar>;
-  }
-  var HTMLBarListElement: {
-    prototype: HTMLBarListElement;
-    new (): HTMLBarListElement;
-  };
-  interface HTMLElementTagNameMap {
-    'bar-list': HTMLBarListElement;
-  }
-  interface ElementTagNameMap {
-    'bar-list': HTMLBarListElement;
-  }
-  namespace JSX {
-    interface IntrinsicElements {
-      'bar-list': JSXElements.BarListAttributes;
-    }
-  }
-  namespace JSXElements {
-    export interface BarListAttributes extends HTMLAttributes {
-      'bars'?: Array<Bar>;
-    }
-  }
-}
-
-
-declare global {
-  interface HTMLBarPageElement extends HTMLStencilElement {
-
-  }
-  var HTMLBarPageElement: {
-    prototype: HTMLBarPageElement;
-    new (): HTMLBarPageElement;
-  };
-  interface HTMLElementTagNameMap {
-    'bar-page': HTMLBarPageElement;
-  }
-  interface ElementTagNameMap {
-    'bar-page': HTMLBarPageElement;
-  }
-  namespace JSX {
-    interface IntrinsicElements {
-      'bar-page': JSXElements.BarPageAttributes;
-    }
-  }
-  namespace JSXElements {
-    export interface BarPageAttributes extends HTMLAttributes {
-
-    }
-  }
-}
-
-
-declare global {
-  interface HTMLBeerDetailElement extends HTMLStencilElement {
-    'beerId': string;
-  }
-  var HTMLBeerDetailElement: {
-    prototype: HTMLBeerDetailElement;
-    new (): HTMLBeerDetailElement;
-  };
-  interface HTMLElementTagNameMap {
-    'beer-detail': HTMLBeerDetailElement;
-  }
-  interface ElementTagNameMap {
-    'beer-detail': HTMLBeerDetailElement;
-  }
-  namespace JSX {
-    interface IntrinsicElements {
-      'beer-detail': JSXElements.BeerDetailAttributes;
-    }
-  }
-  namespace JSXElements {
-    export interface BeerDetailAttributes extends HTMLAttributes {
-      'beerId'?: string;
-    }
-  }
-}
-
-
-declare global {
-  interface HTMLBeerItemElement extends HTMLStencilElement {
-    'beer': Beer;
-    'fave': Boolean;
-  }
-  var HTMLBeerItemElement: {
-    prototype: HTMLBeerItemElement;
-    new (): HTMLBeerItemElement;
-  };
-  interface HTMLElementTagNameMap {
-    'beer-item': HTMLBeerItemElement;
-  }
-  interface ElementTagNameMap {
-    'beer-item': HTMLBeerItemElement;
-  }
-  namespace JSX {
-    interface IntrinsicElements {
-      'beer-item': JSXElements.BeerItemAttributes;
-    }
-  }
-  namespace JSXElements {
-    export interface BeerItemAttributes extends HTMLAttributes {
-      'beer'?: Beer;
-      'fave'?: Boolean;
-      'onBeerDeleted'?: (event: CustomEvent) => void;
-    }
-  }
-}
-
-
-declare global {
-  interface HTMLBeerListElement extends HTMLStencilElement {
-    'beers': Array<Beer>;
-    'fave': Boolean;
-  }
-  var HTMLBeerListElement: {
-    prototype: HTMLBeerListElement;
-    new (): HTMLBeerListElement;
-  };
-  interface HTMLElementTagNameMap {
-    'beer-list': HTMLBeerListElement;
-  }
-  interface ElementTagNameMap {
-    'beer-list': HTMLBeerListElement;
-  }
-  namespace JSX {
-    interface IntrinsicElements {
-      'beer-list': JSXElements.BeerListAttributes;
-    }
-  }
-  namespace JSXElements {
-    export interface BeerListAttributes extends HTMLAttributes {
-      'beers'?: Array<Beer>;
-      'fave'?: Boolean;
-    }
-  }
-}
-
-
-declare global {
-  interface HTMLBeerPageElement extends HTMLStencilElement {
-    'history': RouterHistory;
-  }
-  var HTMLBeerPageElement: {
-    prototype: HTMLBeerPageElement;
-    new (): HTMLBeerPageElement;
-  };
-  interface HTMLElementTagNameMap {
-    'beer-page': HTMLBeerPageElement;
-  }
-  interface ElementTagNameMap {
-    'beer-page': HTMLBeerPageElement;
-  }
-  namespace JSX {
-    interface IntrinsicElements {
-      'beer-page': JSXElements.BeerPageAttributes;
-    }
-  }
-  namespace JSXElements {
-    export interface BeerPageAttributes extends HTMLAttributes {
-      'history'?: RouterHistory;
     }
   }
 }
@@ -495,6 +333,33 @@ declare global {
 
 
 declare global {
+  interface HTMLHomePageElement extends HTMLStencilElement {
+    'history': RouterHistory;
+  }
+  var HTMLHomePageElement: {
+    prototype: HTMLHomePageElement;
+    new (): HTMLHomePageElement;
+  };
+  interface HTMLElementTagNameMap {
+    'home-page': HTMLHomePageElement;
+  }
+  interface ElementTagNameMap {
+    'home-page': HTMLHomePageElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'home-page': JSXElements.HomePageAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface HomePageAttributes extends HTMLAttributes {
+      'history'?: RouterHistory;
+    }
+  }
+}
+
+
+declare global {
   interface HTMLLazyImgElement extends HTMLStencilElement {
     'alt': string;
     'src': string;
@@ -519,6 +384,148 @@ declare global {
       'alt'?: string;
       'onLazyImgloaded'?: (event: CustomEvent<HTMLImageElement>) => void;
       'src'?: string;
+    }
+  }
+}
+
+
+declare global {
+  interface HTMLListingDetailElement extends HTMLStencilElement {
+    'peerId': string;
+    'slug': string;
+  }
+  var HTMLListingDetailElement: {
+    prototype: HTMLListingDetailElement;
+    new (): HTMLListingDetailElement;
+  };
+  interface HTMLElementTagNameMap {
+    'listing-detail': HTMLListingDetailElement;
+  }
+  interface ElementTagNameMap {
+    'listing-detail': HTMLListingDetailElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'listing-detail': JSXElements.ListingDetailAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ListingDetailAttributes extends HTMLAttributes {
+      'peerId'?: string;
+      'slug'?: string;
+    }
+  }
+}
+
+
+declare global {
+  interface HTMLListingItemElement extends HTMLStencilElement {
+    'fave': Boolean;
+    'listing': ListingCard;
+  }
+  var HTMLListingItemElement: {
+    prototype: HTMLListingItemElement;
+    new (): HTMLListingItemElement;
+  };
+  interface HTMLElementTagNameMap {
+    'listing-item': HTMLListingItemElement;
+  }
+  interface ElementTagNameMap {
+    'listing-item': HTMLListingItemElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'listing-item': JSXElements.ListingItemAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ListingItemAttributes extends HTMLAttributes {
+      'fave'?: Boolean;
+      'listing'?: ListingCard;
+      'onListingDeleted'?: (event: CustomEvent) => void;
+    }
+  }
+}
+
+
+declare global {
+  interface HTMLListingListElement extends HTMLStencilElement {
+    'fave': Boolean;
+    'listings': Array<ListingCard>;
+  }
+  var HTMLListingListElement: {
+    prototype: HTMLListingListElement;
+    new (): HTMLListingListElement;
+  };
+  interface HTMLElementTagNameMap {
+    'listing-list': HTMLListingListElement;
+  }
+  interface ElementTagNameMap {
+    'listing-list': HTMLListingListElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'listing-list': JSXElements.ListingListAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ListingListAttributes extends HTMLAttributes {
+      'fave'?: Boolean;
+      'listings'?: Array<ListingCard>;
+    }
+  }
+}
+
+
+declare global {
+  interface HTMLListingPageElement extends HTMLStencilElement {
+
+  }
+  var HTMLListingPageElement: {
+    prototype: HTMLListingPageElement;
+    new (): HTMLListingPageElement;
+  };
+  interface HTMLElementTagNameMap {
+    'listing-page': HTMLListingPageElement;
+  }
+  interface ElementTagNameMap {
+    'listing-page': HTMLListingPageElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'listing-page': JSXElements.ListingPageAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ListingPageAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+  interface HTMLListingSlideshowElement extends HTMLStencilElement {
+    'images': Array<Thumbnails>;
+  }
+  var HTMLListingSlideshowElement: {
+    prototype: HTMLListingSlideshowElement;
+    new (): HTMLListingSlideshowElement;
+  };
+  interface HTMLElementTagNameMap {
+    'listing-slideshow': HTMLListingSlideshowElement;
+  }
+  interface ElementTagNameMap {
+    'listing-slideshow': HTMLListingSlideshowElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'listing-slideshow': JSXElements.ListingSlideshowAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ListingSlideshowAttributes extends HTMLAttributes {
+      'images'?: Array<Thumbnails>;
     }
   }
 }
@@ -663,6 +670,33 @@ declare global {
 
 
 declare global {
+  interface HTMLProfileDetailElement extends HTMLStencilElement {
+    'peerId': string;
+  }
+  var HTMLProfileDetailElement: {
+    prototype: HTMLProfileDetailElement;
+    new (): HTMLProfileDetailElement;
+  };
+  interface HTMLElementTagNameMap {
+    'profile-detail': HTMLProfileDetailElement;
+  }
+  interface ElementTagNameMap {
+    'profile-detail': HTMLProfileDetailElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'profile-detail': JSXElements.ProfileDetailAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ProfileDetailAttributes extends HTMLAttributes {
+      'peerId'?: string;
+    }
+  }
+}
+
+
+declare global {
   interface HTMLProfileHeaderElement extends HTMLStencilElement {
 
   }
@@ -690,6 +724,33 @@ declare global {
 
 
 declare global {
+  interface HTMLProfileListElement extends HTMLStencilElement {
+    'profiles': Array<Profile>;
+  }
+  var HTMLProfileListElement: {
+    prototype: HTMLProfileListElement;
+    new (): HTMLProfileListElement;
+  };
+  interface HTMLElementTagNameMap {
+    'profile-list': HTMLProfileListElement;
+  }
+  interface ElementTagNameMap {
+    'profile-list': HTMLProfileListElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'profile-list': JSXElements.ProfileListAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ProfileListAttributes extends HTMLAttributes {
+      'profiles'?: Array<Profile>;
+    }
+  }
+}
+
+
+declare global {
   interface HTMLProfilePageElement extends HTMLStencilElement {
 
   }
@@ -711,6 +772,155 @@ declare global {
   namespace JSXElements {
     export interface ProfilePageAttributes extends HTMLAttributes {
 
+    }
+  }
+}
+
+
+declare global {
+  interface HTMLRatingItemElement extends HTMLStencilElement {
+    'ratingHash': string;
+  }
+  var HTMLRatingItemElement: {
+    prototype: HTMLRatingItemElement;
+    new (): HTMLRatingItemElement;
+  };
+  interface HTMLElementTagNameMap {
+    'rating-item': HTMLRatingItemElement;
+  }
+  interface ElementTagNameMap {
+    'rating-item': HTMLRatingItemElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'rating-item': JSXElements.RatingItemAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface RatingItemAttributes extends HTMLAttributes {
+      'onListingDeleted'?: (event: CustomEvent) => void;
+      'ratingHash'?: string;
+    }
+  }
+}
+
+
+declare global {
+  interface HTMLRatingListElement extends HTMLStencilElement {
+    'ratingHashes': Array<string>;
+  }
+  var HTMLRatingListElement: {
+    prototype: HTMLRatingListElement;
+    new (): HTMLRatingListElement;
+  };
+  interface HTMLElementTagNameMap {
+    'rating-list': HTMLRatingListElement;
+  }
+  interface ElementTagNameMap {
+    'rating-list': HTMLRatingListElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'rating-list': JSXElements.RatingListAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface RatingListAttributes extends HTMLAttributes {
+      'ratingHashes'?: Array<string>;
+    }
+  }
+}
+
+
+declare global {
+  interface HTMLSearchMenuElement extends HTMLStencilElement {
+    'options': Map<SearchOptionInterface>;
+  }
+  var HTMLSearchMenuElement: {
+    prototype: HTMLSearchMenuElement;
+    new (): HTMLSearchMenuElement;
+  };
+  interface HTMLElementTagNameMap {
+    'search-menu': HTMLSearchMenuElement;
+  }
+  interface ElementTagNameMap {
+    'search-menu': HTMLSearchMenuElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'search-menu': JSXElements.SearchMenuAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface SearchMenuAttributes extends HTMLAttributes {
+      'onLeftSidebarClick'?: (event: CustomEvent) => void;
+      'options'?: Map<SearchOptionInterface>;
+    }
+  }
+}
+
+
+declare global {
+  interface HTMLSearchOptionElement extends HTMLStencilElement {
+    'init': any;
+    'onSearchParamCheckboxActivated': (event: any) => void;
+    'onSearchParamDropdownActivated': (event: any) => void;
+    'onSearchParamRadioActivated': (event: any) => void;
+    'option': SearchOptionInterface;
+    'param': string;
+  }
+  var HTMLSearchOptionElement: {
+    prototype: HTMLSearchOptionElement;
+    new (): HTMLSearchOptionElement;
+  };
+  interface HTMLElementTagNameMap {
+    'search-option': HTMLSearchOptionElement;
+  }
+  interface ElementTagNameMap {
+    'search-option': HTMLSearchOptionElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'search-option': JSXElements.SearchOptionAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface SearchOptionAttributes extends HTMLAttributes {
+      'init'?: any;
+      'onOnSearchParamChange'?: (event: CustomEvent<{ param: string; value: any }>) => void;
+      'option'?: SearchOptionInterface;
+      'param'?: string;
+    }
+  }
+}
+
+
+declare global {
+  interface HTMLSearchProviderElement extends HTMLStencilElement {
+    'searchProviders': Array<SearchProvider>;
+    'storedSearchProvider': SearchProvider;
+  }
+  var HTMLSearchProviderElement: {
+    prototype: HTMLSearchProviderElement;
+    new (): HTMLSearchProviderElement;
+  };
+  interface HTMLElementTagNameMap {
+    'search-provider': HTMLSearchProviderElement;
+  }
+  interface ElementTagNameMap {
+    'search-provider': HTMLSearchProviderElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'search-provider': JSXElements.SearchProviderAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface SearchProviderAttributes extends HTMLAttributes {
+      'onBackgroundToggle'?: (event: CustomEvent) => void;
+      'onOnSearchProviderChange'?: (event: CustomEvent) => void;
+      'searchProviders'?: Array<SearchProvider>;
+      'storedSearchProvider'?: SearchProvider;
     }
   }
 }
@@ -745,7 +955,7 @@ declare global {
 
 declare global {
   interface HTMLShareButtonElement extends HTMLStencilElement {
-    'beer': any;
+    'listing': any;
   }
   var HTMLShareButtonElement: {
     prototype: HTMLShareButtonElement;
@@ -764,34 +974,70 @@ declare global {
   }
   namespace JSXElements {
     export interface ShareButtonAttributes extends HTMLAttributes {
-      'beer'?: any;
+      'listing'?: any;
     }
   }
 }
 
 
 declare global {
-  interface HTMLStencilBeerElement extends HTMLStencilElement {
-
+  interface HTMLStoreItemElement extends HTMLStencilElement {
+    'fave': Boolean;
+    'listing': Listing;
+    'peerID': string;
   }
-  var HTMLStencilBeerElement: {
-    prototype: HTMLStencilBeerElement;
-    new (): HTMLStencilBeerElement;
+  var HTMLStoreItemElement: {
+    prototype: HTMLStoreItemElement;
+    new (): HTMLStoreItemElement;
   };
   interface HTMLElementTagNameMap {
-    'stencil-beer': HTMLStencilBeerElement;
+    'store-item': HTMLStoreItemElement;
   }
   interface ElementTagNameMap {
-    'stencil-beer': HTMLStencilBeerElement;
+    'store-item': HTMLStoreItemElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      'stencil-beer': JSXElements.StencilBeerAttributes;
+      'store-item': JSXElements.StoreItemAttributes;
     }
   }
   namespace JSXElements {
-    export interface StencilBeerAttributes extends HTMLAttributes {
+    export interface StoreItemAttributes extends HTMLAttributes {
+      'fave'?: Boolean;
+      'listing'?: Listing;
+      'onListingDeleted'?: (event: CustomEvent) => void;
+      'peerID'?: string;
+    }
+  }
+}
 
+
+declare global {
+  interface HTMLStoreListElement extends HTMLStencilElement {
+    'fave': Boolean;
+    'listings': Array<Listing>;
+    'peerID': string;
+  }
+  var HTMLStoreListElement: {
+    prototype: HTMLStoreListElement;
+    new (): HTMLStoreListElement;
+  };
+  interface HTMLElementTagNameMap {
+    'store-list': HTMLStoreListElement;
+  }
+  interface ElementTagNameMap {
+    'store-list': HTMLStoreListElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'store-list': JSXElements.StoreListAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface StoreListAttributes extends HTMLAttributes {
+      'fave'?: Boolean;
+      'listings'?: Array<Listing>;
+      'peerID'?: string;
     }
   }
 }
@@ -900,6 +1146,145 @@ declare global {
   namespace JSXElements {
     export interface UsersPageAttributes extends HTMLAttributes {
 
+    }
+  }
+}
+
+
+declare global {
+  interface HTMLXuiCheckboxElement extends HTMLStencilElement {
+    'checked': boolean;
+    'label': string;
+    'radio': boolean;
+    'slider': boolean;
+    'toggle': boolean;
+  }
+  var HTMLXuiCheckboxElement: {
+    prototype: HTMLXuiCheckboxElement;
+    new (): HTMLXuiCheckboxElement;
+  };
+  interface HTMLElementTagNameMap {
+    'xui-checkbox': HTMLXuiCheckboxElement;
+  }
+  interface ElementTagNameMap {
+    'xui-checkbox': HTMLXuiCheckboxElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'xui-checkbox': JSXElements.XuiCheckboxAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface XuiCheckboxAttributes extends HTMLAttributes {
+      'checked'?: boolean;
+      'label'?: string;
+      'radio'?: boolean;
+      'slider'?: boolean;
+      'toggle'?: boolean;
+    }
+  }
+}
+
+
+declare global {
+  interface HTMLXuiDropdownItemElement extends HTMLStencilElement {
+    'active': boolean;
+    'icon': string;
+    'text': string;
+    'value': any;
+  }
+  var HTMLXuiDropdownItemElement: {
+    prototype: HTMLXuiDropdownItemElement;
+    new (): HTMLXuiDropdownItemElement;
+  };
+  interface HTMLElementTagNameMap {
+    'xui-dropdown-item': HTMLXuiDropdownItemElement;
+  }
+  interface ElementTagNameMap {
+    'xui-dropdown-item': HTMLXuiDropdownItemElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'xui-dropdown-item': JSXElements.XuiDropdownItemAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface XuiDropdownItemAttributes extends HTMLAttributes {
+      'active'?: boolean;
+      'icon'?: string;
+      'text'?: string;
+      'value'?: any;
+    }
+  }
+}
+
+
+declare global {
+  interface HTMLXuiDropdownElement extends HTMLStencilElement {
+    'icon': string;
+    'name': string;
+    'openOnFocus': boolean;
+    'selection': boolean;
+    'text': string;
+    'value': any;
+  }
+  var HTMLXuiDropdownElement: {
+    prototype: HTMLXuiDropdownElement;
+    new (): HTMLXuiDropdownElement;
+  };
+  interface HTMLElementTagNameMap {
+    'xui-dropdown': HTMLXuiDropdownElement;
+  }
+  interface ElementTagNameMap {
+    'xui-dropdown': HTMLXuiDropdownElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'xui-dropdown': JSXElements.XuiDropdownAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface XuiDropdownAttributes extends HTMLAttributes {
+      'icon'?: string;
+      'name'?: string;
+      'onInput'?: (event: CustomEvent) => void;
+      'openOnFocus'?: boolean;
+      'selection'?: boolean;
+      'text'?: string;
+      'value'?: any;
+    }
+  }
+}
+
+
+declare global {
+  interface HTMLXuiSegmentElement extends HTMLStencilElement {
+    'active': boolean;
+    'attach': any;
+    'dataTab': string;
+    'tab': boolean;
+  }
+  var HTMLXuiSegmentElement: {
+    prototype: HTMLXuiSegmentElement;
+    new (): HTMLXuiSegmentElement;
+  };
+  interface HTMLElementTagNameMap {
+    'xui-segment': HTMLXuiSegmentElement;
+  }
+  interface ElementTagNameMap {
+    'xui-segment': HTMLXuiSegmentElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'xui-segment': JSXElements.XuiSegmentAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface XuiSegmentAttributes extends HTMLAttributes {
+      'active'?: boolean;
+      'attach'?: any;
+      'dataTab'?: string;
+      'tab'?: boolean;
     }
   }
 }

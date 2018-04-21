@@ -8,30 +8,30 @@ import { AlertController } from '@ionic/core';
 })
 export class ShareButton {
 
-  @Prop() beer: any;
+  @Prop() listing: any;
   @Prop({ connect: 'ion-alert-controller' }) alertCtrl: AlertController;
 
-  async share(beer) {
+  async share(listing) {
     if ((navigator as any).share) {
       // have to catch here as web share
       // is available on desktop chrome
       // but fails
       try {
-        this.handleNativeShare(beer);
+        this.handleNativeShare(listing);
       } catch (e) {
-        this.handleTradShare(beer);
+        this.handleTradShare(listing);
       }
     } else {
-      this.handleTradShare(beer);
+      this.handleTradShare(listing);
     }
   }
 
-  handleTradShare(beer) {
-    window.open(`http://twitter.com/share?text=Check this out!&url=${window.location.href}/detail/${beer.id}`);
+  handleTradShare(listing) {
+    window.open(`http://twitter.com/share?text=Check this out!&url=${window.location.href}/detail/${listing.slug}`);
   }
 
-  async handleNativeShare(beer) {
-    console.log(beer);
+  async handleNativeShare(listing) {
+    console.log(listing);
     /*const alert = await this.alertCtrl.create({
       title: 'Share',
       message: 'Message to Share',
@@ -39,7 +39,7 @@ export class ShareButton {
         {
           name: 'shareText',
           id: 'shareText',
-          placeholder: 'Check out this cool beer!'
+          placeholder: 'Check out this cool listing!'
         }
       ],
       buttons: [
@@ -58,7 +58,7 @@ export class ShareButton {
             (navigator as any).share({
               title: document.title,
               text: `${shareText}`,
-              url: `${window.location.href}/detail/${beer.id}`
+              url: `${window.location.href}/detail/${listing.id}`
             });
           }
         }
@@ -68,14 +68,14 @@ export class ShareButton {
     alert.present();*/
     (navigator as any).share({
       title: document.title,
-      text: 'Check out this cool beer',
-      url: `${window.location.href}/detail/${beer.id}`
+      text: 'Check out this cool listing',
+      url: `${window.location.href}/detail/${listing.slug}`
     })
   }
 
   render() {
     return (
-      <ion-button color='secondary' onClick={() => this.share(this.beer)} fill='clear' icon-only>
+      <ion-button color='secondary' onClick={() => this.share(this.listing)} fill='clear' icon-only>
         <ion-icon name='share'></ion-icon>
       </ion-button>
     );

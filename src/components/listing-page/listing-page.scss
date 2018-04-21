@@ -1,4 +1,6 @@
-beer-page {
+@import '../../global/stencil-variables';
+
+listing-page {
 
   #stylesBar {
     display: flex;
@@ -7,7 +9,7 @@ beer-page {
     margin: 10px;
 
     ion-button {
-      margin-right: 5px;
+      margin-right: 3px;
     }
   }
 
@@ -17,8 +19,27 @@ beer-page {
     fill: white;
   }
 
+
+  ion-card{
+    margin: 0px;
+  }
+
+
+  ion-col{
+    padding: 0px;
+  }
+
+  card-ios{
+    margin: 0px;
+    padding: 0px;
+  }
+
+
+  ion-col{
+    padding: 0px;
+  }
   ion-scroll {
-    background: #ececec !important;
+    background: #e3e3e3 !important;
   }
 
   ion-button[disabled] {
@@ -29,10 +50,53 @@ beer-page {
     color: grey;
   }
 
+  #searchProvider img {
+    max-height: 42px;
+    object-fit: contain;
+  }
+
+  #search-menu {
+    float: left;
+    width: 180px;
+    height: 100%;
+    margin-right: 8px;
+    background-color: #f5f5f5;
+    position: fixed;
+    left: 0px;
+    top: 115px;
+    overflow-y: scroll;
+    .card-ios{
+      margin: 4px;
+      width: 95%!important;
+    }
+  }
+  #content-area {
+    position: relative;
+    margin-left: 180px;
+    min-height: 2400px;
+    background-color: #f0eaed;
+  }
+
   ion-infinite-scroll-content {
     text-align: center;
-    display: flex;
+    //display: flex;
     flex-direction: column;
     justify-content: center;
   }
 }
+
+#search-menu-fab{
+  position: fixed;
+  top: 100px;
+  left: -15px;
+}
+
+.content-menu-left{
+  margin-left: 180px !important;
+}
+
+.content-flush-left{
+  margin-left: 0px !important;
+}
+
+

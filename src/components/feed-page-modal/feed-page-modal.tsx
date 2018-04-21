@@ -1,7 +1,7 @@
 import { Component, Element, Listen, Prop, State } from '@stencil/core';
 import { AlertController } from '@ionic/core';
 
-declare var firebase: any;
+
 
 @Component({
   tag: 'feed-page-modal',
@@ -24,7 +24,7 @@ export class FeedPageModal {
   fileToUpload: File;
 
   componentDidLoad() {
-    this.storage = firebase.storage();
+    this.storage = null //firebase.storage();
     this.rootRef = this.storage.ref();
   }
 
@@ -79,13 +79,14 @@ export class FeedPageModal {
 
   async submit() {
     if (this.postValue && this.beerNameValue && this.ratingValue) {
-      firebase.firestore().collection('feed').add({
-        author: firebase.auth().currentUser.email,
-        postText: this.postValue,
-        title: this.beerNameValue,
-        rating: this.ratingValue,
-        image: this.imageRef ? this.imageRef.fullPath : null
-      });
+      // TODO refactor for local storage
+      //fb.firestore().collection('feed').add({
+      //  author: firebase.auth().currentUser.email,
+      //  postText: this.postValue,
+      //  title: this.beerNameValue,
+      //  rating: this.ratingValue,
+      //  image: this.imageRef ? this.imageRef.fullPath : null
+      //});
 
       if (this.imageRef) {
         await this.imageRef.put(this.fileToUpload);

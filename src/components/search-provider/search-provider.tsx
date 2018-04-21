@@ -1,21 +1,35 @@
-import {Component, State, Event, EventEmitter} from '@stencil/core';
-import {SearchProvider} from '../../global/interfaces';
+import {Component, State, Prop, Event, EventEmitter} from '@stencil/core';
+import {SearchProvider} from '../../global/interfaces-app';
+
+
+
 @Component({
-    tag: 'search-widget',
-    styleUrl: 'search-widget.scss'
+    tag: 'search-provider',
+    styleUrl: 'search-provider.scss'
 })
 export class SearchWidget {
 
-    @State() searchProviders: Array<SearchProvider>;
-    @State() searchProvider: SearchProvider;
+    @Prop() searchProviders: Array<SearchProvider>;
+    @Prop() storedSearchProvider: SearchProvider;
     @State() searchOptions: any[];
 
     @Event() backgroundToggle: EventEmitter;
+    @Event() onSearchProviderChange: EventEmitter;
+
+
+
+    onSearchProviderChangeActivated(event) {
+         if(event.detail !== this.storedSearchProvider.id){
+             this.onSearchProviderChange.emit((event.detail));
+         }
+    }
+
+
+
+
 
     async componentDidLoad() {
-        const response = await fetch('/assets/data.json');
-        const data = await response.json();
-        this.searchProviders = data.searchProviders;
+
     }
 
     menuToggle(e) {
@@ -23,37 +37,42 @@ export class SearchWidget {
         this.backgroundToggle.emit(e);
     }
 
-    selectProvider()
 
-    async selectProvider() {
-        console.log("Select Search Provider");
-        // set up with first bit of content
-        try {
-            this.searchProviders = null;
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
-
-    async selectOptions() {
-        console.log("Search Options");
-        // set up with first bit of content
-        try {
-            this.searchProviders = null;
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
 
     render() {
-        return (
-            <ion-grid class="search-menu">
-                <ion-row>
-                        <slot/>
-                </ion-row>
-            </ion-grid>
-        );
+        if (this.searchProviders !==undefined) {
+            return (
+
+                        <xui-dropdown class="providerMenu"
+                                      text="Search Provider"
+                                      value={this.storedSearchProvider? this.storedSearchProvider.id: ''}
+                                      icon={this.storedSearchProvider? this.storedSearchProvider.logo : '/assets/img/searchProviders/defaultProvider.png'}
+                                      selection
+                                      onInput={(event) => this.onSearchProviderChangeActivated(event)}
+                        >
+                            {
+                                this.searchProviders.map((searchProvider) => {
+                                        return (
+                                            <xui-dropdown-item icon={searchProvider ? searchProvider.logo : '/assets/img/searchProviders/defaultProvider.png'}
+                                                               value={searchProvider.id}
+                                                               text={searchProvider.name}>
+                                            </xui-dropdown-item>
+                                        )
+                                    }
+                                )
+                            }
+                        </xui-dropdown>
+
+
+            );
+        }else{
+            return(<div>
+                <ion-button onClick={(event) => this.onSearchProviderChangeActivated(event)}>
+                    No Search Providers Loaded
+                </ion-button>
+
+            </div>)
+        }
+
     }
 }

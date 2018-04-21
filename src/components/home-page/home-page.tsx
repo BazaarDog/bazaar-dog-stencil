@@ -1,5 +1,5 @@
 import { Component, State, Prop } from '@stencil/core';
-// import { RouterHistory } from '@stencil/router';
+import { RouterHistory } from '@stencil/router';
 
 import { ToastController } from '@ionic/core';
 
@@ -7,24 +7,27 @@ import { notify } from '../../global/notify-service';
 
 // import firebase from 'firebase';
 
-declare var firebase: any;
+
 
 @Component({
-  tag: 'profile-page',
-  styleUrl: 'profile-page.scss'
+  tag: 'home-page',
+  styleUrl: 'home-page.scss'
 })
 export class ProfilePage {
 
   @State() user: any;
+  @State() gateways: any[];
   @State() subscribed: boolean;
   @State() swSupport: boolean;
+
+  @Prop() history: RouterHistory;
 
   @Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
   @Prop({ context: 'isServer' }) private isServer: boolean;
 
   componentWillLoad() {
     if (!this.isServer) {
-      this.user = firebase.auth().currentUser;
+      this.user = null //firebase.auth().currentUser;
 
       if ('serviceWorker' in navigator && 'PushManager' in window) {
         this.swSupport = true;
@@ -36,6 +39,7 @@ export class ProfilePage {
 
   componentDidLoad() {
     if (!this.isServer) {
+
       navigator.serviceWorker.getRegistration().then((reg: ServiceWorkerRegistration) => {
         if (reg) {
           reg.pushManager.getSubscription().then((sub: PushSubscription) => {
@@ -61,7 +65,7 @@ export class ProfilePage {
   async logout() {
     console.log('here');
     try {
-      await firebase.auth().signOut();
+      // await firebase.auth().signOut();
       // this.history.replace('/', {});
       document.querySelector('ion-nav').setRoot('auth-page');
     } catch (e) {
@@ -86,10 +90,10 @@ export class ProfilePage {
   }
 
   render() {
-    if (this.user && this.swSupport) {
+    if (this.swSupport) {
       return (
         <ion-page class='show-page'>
-          <ion-header md-height="96px">
+          <ion-header md-height="86px">
             <ion-toolbar color='dark'>
               <ion-buttons slot="start">
                 <ion-back-button defaultHref='/home' />
@@ -100,13 +104,10 @@ export class ProfilePage {
 
           <ion-content padding>
             <div id='imageBlock'>
-              <img src={this.user.photoURL}></img>
+              <img src='/assets/img/defaultAvatar.png'/>
             </div>
 
-            <h2>{this.user.displayName}</h2>
-            <p>{this.user.email}</p>
-
-            <div id='profileButtonBlock'>
+            <div id='homeButtonBlock'>
               {this.subscribed ? <ion-button onClick={() => this.unsubscribe()} expand='block' color='danger'>Unsubscribe</ion-button>
                 : <ion-button onClick={() => this.notications()} expand='block' color='primary'>Get Notifications</ion-button>
               }
@@ -116,7 +117,7 @@ export class ProfilePage {
           </ion-content>
         </ion-page>
       );
-    } else if (this.user && !this.swSupport) {
+    } else if (!this.swSupport) {
       <ion-page class='show-page'>
         <ion-header md-height="96px">
           <ion-toolbar color='dark'>
@@ -129,11 +130,9 @@ export class ProfilePage {
 
         <ion-content padding>
           <div id='imageBlock'>
-            <img src={this.user.photoURL}></img>
+            <img src='/assets/img/defaultAvatar.png'></img>
           </div>
 
-          <h2>{this.user.displayName}</h2>
-          <p>{this.user.email}</p>
 
           <div id='noSwProfileButtonBlock'>
             <ion-button onClick={() => this.logout()} id='logoutButton' expand='block' color='danger'>Logout</ion-button>

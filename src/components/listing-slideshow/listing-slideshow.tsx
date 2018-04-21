@@ -1,37 +1,62 @@
-import { Component, Prop } from '@stencil/core';
+import {Component, Prop, State, Element} from '@stencil/core';
 
-import {Listing} from '../../global/interfaces';
-
+import {Thumbnails} from '../../global/interfaces';
 
 @Component({
-  tag: 'store-list',
-  styleUrl: 'store-list.scss'
+    tag: 'listing-slideshow',
+    styleUrl: 'listing-slideshow.scss'
 })
-export class StoreList {
+export class ListingSlideshow {
 
-  @Prop() listings: Array<Listing>;
-  @Prop() peerID: string;
-  @Prop() fave: Boolean;
+    @Element() el: HTMLElement;
+    @State() gallery: Array<any>;
+    @State() gateway: string = 'https://gateway.ob1.io/';
+    @Prop() images: Array<Thumbnails>;
 
-  render() {
-    if (this.listings) {
-      const listings = this.listings.map((listing) => {
-        return (
-          <store-item fave={this.fave} peerID={this.peerID} listing={listing} ></store-item>
-        )
-      });
-
-      return (
-        <ion-list >
-          {listings}
-        </ion-list>
-      )
-    } else {
-      return (
-        <ion-list>
-          <div > No Results</div>
-        </ion-list>
-      )
+    render() {
+        if (this.images !== undefined) {
+            return ([
+                <ion-grid>
+                    <ion-row>
+                        {
+                            this.images.slice(0,1).map((img) => {
+                                return (
+                                    <ion-col col-12>
+                                        <a data-fancybox="gallery"
+                                           href={ img ? this.gateway + `ipfs/` + img.large : '/assets/img/defaultItem.png'}>
+                                            <img
+                                                src={ img ? this.gateway + `ipfs/` + img.large : '/assets/img/defaultItem.png'}
+                                            />
+                                        </a>
+                                    </ion-col>
+                                )
+                                })
+                                }
+                    </ion-row>
+                    <ion-row>
+                        {
+                            this.images.slice(1).map((img) => {
+                                return (
+                                    <ion-col col-4>
+                                        <a data-fancybox="gallery" class="tiny"
+                                           href={ img ? this.gateway + `ipfs/` + img.large : '/assets/img/defaultItem.png'}>
+                                            <img
+                                                src={ img ? this.gateway + `ipfs/` + img.tiny : '/assets/img/defaultItem.png'}
+                                            />
+                                        </a>
+                                    </ion-col>
+                                )
+                                })
+                                }
+                    </ion-row>
+                </ion-grid>
+            ])
+        } else {
+            return (
+                <ion-slides>
+                    <div >Unable to load images</div>
+                </ion-slides>
+            )
+        }
     }
-  }
 }

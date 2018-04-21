@@ -1,6 +1,8 @@
-# IonicBeer
+# Bazaar Dog Stencil
 
-Live demo here: https://stencilbeer.firebaseapp.com/
+an open-source progressive web app for the open-bazaar 2 protocol
+
+Live Version Here: https://app.bazaar.dog/
 
 Stencil is a compiler for building fast web apps using Web Components.
 

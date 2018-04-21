@@ -22,8 +22,33 @@ export function formatBytes(bytes: number, decimals?: number) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
+
+export function serialize( obj ) {
+  return '?'+Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&')
+}
+
+/*
+
+// This should may handel arrays
+
+export function serialize(obj: any, prefix: any) {
+  let str = [],
+      p;
+  for (p in obj) {
+    if (obj.hasOwnProperty(p)) {
+      let k = prefix ? prefix + "[" + p + "]" : p,
+          v = obj[p];
+      str.push((v !== null && typeof v === "object") ?
+          serialize(v, k) :
+          encodeURIComponent(k) + "=" + encodeURIComponent(v));
+    }
+  }
+  return str.join("&");
+}
+*/
+
 export function checkAnon() {
-  return sessionStorage.getItem('anon');
+  return false; //sessionStorage.getItem('anon');
 }
 
 

@@ -1,6 +1,6 @@
 import { Component, State, Listen } from '@stencil/core';
 
-import { Beer } from '../../global/interfaces';
+import { ListingCard } from '../../global/interfaces';
 
 declare var firebase: any;
 
@@ -10,35 +10,35 @@ declare var firebase: any;
 })
 export class favoritesPage {
 
-  @State() beers: Array<Beer>;
+  @State() listings: Array<ListingCard>;
 
   async componentDidLoad() {
-    const tempBeers = [];
+    const tempListings = [];
     
 
-    this.getSavedBeers().then((querySnapshot) => {
+    this.getSavedListings().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        tempBeers.push(doc.data().beer);
+        tempListings.push(doc.data().listing);
       })
 
-      this.beers = tempBeers;
+      this.listings = tempListings;
     })
   }
 
-  getSavedBeers() {
-    return firebase.firestore().collection('savedBeers').where('author', '==', firebase.auth().currentUser.email).get();
+  getSavedListings() {
+    return firebase.firestore().collection('savedListings').where('author', '==', firebase.auth().currentUser.email).get();
   }
 
-  @Listen('beerDeleted')
-  getFreshBeers() {
-    const tempBeers = [];
+  @Listen('listingDeleted')
+  getFreshListings() {
+    const tempListings = [];
 
-    this.getSavedBeers().then((querySnapshot) => {
+    this.getSavedListings().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        tempBeers.push(doc.data().beer);
+        tempListings.push(doc.data().listing);
       })
 
-      this.beers = tempBeers;
+      this.listings = tempListings;
     })
   }
 
@@ -49,7 +49,7 @@ export class favoritesPage {
         </profile-header>
 
         <ion-content>
-          <beer-list fave={true} beers={this.beers}></beer-list>
+          <listing-list fave={true} listings={this.listings}></listing-list>
         </ion-content>
       </ion-page>
     );

@@ -1,6 +1,6 @@
 {
-  "name": "IonicBeer",
-  "short_name": "IonicBeer",
+  "name": "BazaarDog",
+  "short_name": "BazaarDog",
   "start_url": "/",
   "display": "standalone",
   "icons": [{
@@ -9,6 +9,5 @@
     "type": "image/png"
   }],
   "background_color": "#222",
-  "theme_color": "#222",
-  "gcm_sender_id": "103953800507"
+  "theme_color": "#222"
 }

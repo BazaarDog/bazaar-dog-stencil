@@ -1,3 +1,11 @@
+
+.providerIcon {
+  img {
+    max-width: 42px;
+    max-height: 42px;
+  }
+}
+
 provider-menu {
   position: absolute;
   top: 0px;
@@ -8,7 +16,6 @@ provider-menu {
   background-color: transparent !important;
   padding: 10px;
 }
-
 
 options-menu {
   position: absolute;
@@ -21,7 +28,6 @@ options-menu {
   padding: 10px;
 }
 
-
 actual-menu {
   position: absolute;
   top: 0px;
@@ -32,8 +38,23 @@ actual-menu {
   z-index: 30;
 }
 
-#searchOptionsIcon{
-  font-size: 2em;
+ion-card {
+  overflow: visible;
+}
+
+providerMenu icon img {
+  max-width: 42px;
+}
+
+
+.ui.selection.dropdown {
+  min-width: 165px !important;
+  max-width: 165px !important;
+  padding: 3px;
+}
+
+lazy-img img {
+  object-fit: contain;
 }
 
 menu-button {
@@ -44,10 +65,16 @@ menu-button {
 
 menu-background {
   position: absolute;
-  background-color: rgba(38,38,38, 0.2);
+  background-color: rgba(38, 38, 38, 0.2);
   top: 0px;
   left: 0px;
   width: 100%;
   min-height: 100%;
   z-index: 5;
 }
+
+xui-dropdown {
+  position: absolute;
+  z-index: 999;
+}
+

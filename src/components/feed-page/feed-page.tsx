@@ -3,7 +3,7 @@ import { ModalController } from '@ionic/core';
 
 import { checkAnon } from '../../global/utils';
 
-declare var firebase: any;
+declare var localforage: any;
 
 @Component({
   tag: 'feed-page',
@@ -22,14 +22,18 @@ export class FeedPage {
   async getPosts() {
     const tempPosts = [];
 
-    const snapshot = await firebase.firestore().collection('feed').get();
-    snapshot.forEach((doc) => {
-      tempPosts.push(doc.data());
+    localforage.setItem('key', 'value').then(function () {
+      return localforage.getItem('key');
+    }).then(function (value) {
+      value.forEach((doc) => {
+        tempPosts.push(doc.data());
+      });
+      console.log(tempPosts);
+      this.posts = tempPosts;
+    }).catch(function (err) {
+      console.error(err);
+      // we got an error
     });
-
-    console.log(tempPosts);
-
-    this.posts = tempPosts;
   }
 
   @Listen('body:ionModalDidDismiss')

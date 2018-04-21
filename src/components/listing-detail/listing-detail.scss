@@ -1,8 +1,10 @@
-beer-detail {
+listing-detail {
   ion-scroll {
-    padding: 1em;
   }
 
+  img{
+    object-fit: contain;
+  }
   ion-fab {
     animation-name: slidefab;
     animation-duration: 0.7s;

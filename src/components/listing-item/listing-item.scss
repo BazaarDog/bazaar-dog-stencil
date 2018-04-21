@@ -1,10 +1,44 @@
 listing-item {
 
+  ion-card-header{
+    padding: 0px !important;
+  }
+
+  ion-card-content{
+    padding: 0px !important;
+  }
+
   ion-card {
-    opacity: 0;
+    width: 180px !important;
+  }
+
+  ion-card-content {
+    border-top-style: solid;
+    border-top-color: #f9f9f9;
+    border-top-width: 0.1px;
+  }
+
+  .card-content {
+    background: #ffffff;
+  }
+  .button {
+    font-size: 0.7em;
+  }
+
+  .card-ios {
+    background: #ffffff;
+    margin: 4px 4px;
+    width: 180px !important;
+  }
+  .ios-buttons {
+    font-size: 0.7em;
+  }
+  .button-md {
+    padding: 2px;
   }
 
   p {
+    padding: 0em 0.5em;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -14,20 +48,60 @@ listing-item {
     display: flex;
   }
 
-  #anchorDiv {
-    margin-left: auto;
+  .priceLabel {
+    max-width: 120px;
+    font-size: 0.7em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
-  lazy-img {
+  .vendorName {
+    font-size: 0.7em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .infoDiv {
+    max-height: 60px !important;
+    width: 120px !important;
+  }
+
+  .avatarDiv {
+
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: auto;
+    height: 60px !important;
+    width: 60px !important;
+  }
+
+  .avatarImg{
+    height: 60px !important;
+    width: 60px !important;
+  }
+
+  ion-card lazy-img {
+    background: #fafafa;
     display: flex;
     justify-content: center;
-    height: 20em;
     position: relative;
-    top: -8px;
+    //top: -8px;
+    img {
+      //object-fit: contain;
+    }
+  }
+
+  .listing-item-cover img {
+    height: 180px;
+    width: 180px;
+    object-fit: cover;
   }
 
   ion-icon svg {
     width: 1.5em;
     height: 1.2em;
   }
+
 }

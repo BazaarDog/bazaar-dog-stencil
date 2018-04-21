@@ -15,6 +15,12 @@ export class PopoverPage {
 
   @Element() el: Element;
 
+  openHome() {
+    this.closePopover.emit();
+    document.querySelector('ion-nav').push('home-page');
+
+  }
+
   openProfile() {
     this.closePopover.emit();
     document.querySelector('ion-nav').push('profile-page');
@@ -32,7 +38,6 @@ export class PopoverPage {
   }
 
   async logout() {
-    console.log('here');
     this.closePopover.emit();
     await firebase.auth().signOut();
     // this.history.replace('/', {});
@@ -42,7 +47,7 @@ export class PopoverPage {
   render() {
     return (
       <ion-list no-lines>
-        <ion-item onClick={() => this.openProfile()}><ion-label>My Profile</ion-label></ion-item>
+        <ion-item onClick={() => this.openHome()}><ion-label>Home</ion-label></ion-item>
         <ion-item onClick={() => this.openAll()}><ion-label>All Users</ion-label></ion-item>
         <ion-item onClick={() => this.settings()}><ion-label>Settings</ion-label></ion-item>
         <ion-item onClick={() => this.logout()}><ion-label color='danger'>Logout</ion-label></ion-item>

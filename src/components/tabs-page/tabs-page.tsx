@@ -15,11 +15,11 @@ export class TabsPage {
           <ion-nav></ion-nav>
         </ion-tab>
 
-        <ion-tab selected={true} title='beers' icon='beer' name='beer-tab'>
+        <ion-tab selected={true} title='listings' icon='shirt' name='listing-tab'>
           <ion-nav></ion-nav>
         </ion-tab>
 
-        <ion-tab title='bars' icon='pint' name='bar-tab'>
+        <ion-tab title='peers' icon='people' name='profile-tab'>
           <ion-nav></ion-nav>
         </ion-tab>
 

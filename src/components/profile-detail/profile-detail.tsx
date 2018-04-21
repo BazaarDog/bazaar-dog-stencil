@@ -1,131 +1,140 @@
-import { Component, Prop, State } from '@stencil/core';
-import { LoadingController, Loading } from '@ionic/core';
-
-declare var google: any;
+import {Component, Prop, State} from '@stencil/core';
+import {LoadingController, Loading} from '@ionic/core';
+import {Profile, Listing, Follower} from '../../global/interfaces';
+import {
+    getProfile,
+    getListings,
+    getRatingHashes
+} from '../../global/http-service';
+import {ToastController} from '@ionic/core';
+// const { createProxyClient } = require('ipfs-postmsg-proxy');
+// let node;
 
 @Component({
-  tag: 'bar-directions',
-  styleUrl: 'bar-directions.scss'
+    tag: 'profile-detail',
+    styleUrl: 'profile-detail.scss'
 })
-export class BarDirections {
+export class ProfileDetail {
 
-  // @Prop() match: any;
-  @Prop() address: string;
-  @Prop() dest: string;
-  @Prop({ connect: 'ion-loading-controller' }) loadingCtrl: LoadingController;
+    // @Prop() match: any;
+    @Prop({connect: 'ion-loading-controller'}) loadingCtrl: LoadingController;
 
-  @State() directionsRequest: any;
+    @State() gateway: string = 'https://gateway.ob1.io/';
 
-  url = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCb9lhLYxUnRjSp1oIGl6aAsXLODc3o-f4';
-  script: HTMLScriptElement;
-  loading: Loading;
+    @State() detailRequest: any;
 
-  loadScript() {
-    return new Promise((resolve) => {
-      this.script = document.createElement('script');
-      this.script.src = this.url;
-      document.body.appendChild(this.script);
-      resolve();
-    });
-  }
+    @Prop() peerId: string;
+    @Prop({connect: 'ion-toast-controller'}) toastCtrl: ToastController;
 
-  async componentDidLoad() {
-    this.loading = await this.loadingCtrl.create({
-      content: 'loading directions...'
-    });
-    this.loading.present();
+    @State() profile: Profile;
+    @State() listings: Array<Listing>;
+    @State() ratingHashes: Array<string>;
 
-    await this.loadScript();
+    @State() followers: Array<Follower>;
+    @State() following: Array<string>;
 
-    this.script.addEventListener('load', async () => {
-      const response = await fetch('/googleGeocode', {
-        method: 'post',
-        body: JSON.stringify({ address: this.address })
-      });
-      const data = await response.json();
 
-      navigator.geolocation.getCurrentPosition((position) => {
-        const start = { lat: position.coords.latitude, lng: position.coords.longitude };
-        const dest = { lat: data.results[0].geometry.location.lat, lng: data.results[0].geometry.location.lng };
+    loading: Loading;
 
-        const map = new google.maps.Map(document.querySelector('#map'), {
-          center: start,
-          zoom: 7
+
+    async componentDidLoad() {
+        this.loading = await this.loadingCtrl.create({
+            content: 'loading detail...'
         });
-
-        const directionsDisplay = new google.maps.DirectionsRenderer({
-          map: map
-        });
-
-        // Set destination, origin and travel mode.
-        const request = {
-          destination: dest,
-          origin: start,
-          travelMode: 'DRIVING'
-        };
-
-        // Pass the directions request to the directions service.
-        const directionsService = new google.maps.DirectionsService();
-        directionsService.route(request, (response, status) => {
-          if (status == 'OK') {
-            console.log(response);
-            this.directionsRequest = response.routes[0].legs[0];
-            console.log(this.directionsRequest);
-            // Display the route on the map.
-            directionsDisplay.setDirections(response);
+        try {
+            this.loading.present();
+            this.profile = await getProfile(this.gateway, this.peerId);
+            this.listings = await getListings(this.gateway, this.peerId);
+            this.ratingHashes = await getRatingHashes(this.gateway, this.peerId);
+            //this.followers = await getFollowers(this.gateway, this.peerId);
+            //this.following = await getFollowing(this.gateway, this.peerId);
             this.loading.dismiss();
-          } else {
-            this.loading.dismiss();
-          }
-        });
-      })
-    });
-  }
+        }
+        catch (err) {
+            this.showErrorToast();
+            console.log(err);
+        }
+    }
 
-  openMaps() {
-    window.open(`https://www.google.com/maps/dir/?api=1&origin=${this.directionsRequest.start_address}&destination=${this.directionsRequest.end_address}`);
-  }
+    async showErrorToast() {
+        const toast = await this.toastCtrl.create({message: 'Error loading data', duration: 1000});
+        toast.present();
+    }
 
-  render() {
-    return (
-      <ion-page>
-        <profile-header>
-          <ion-back-button defaultHref='/home' />
-        </profile-header>
-        <ion-content>
-          <div id='map'></div>
-          <div id='bottomPaper'>
 
-            <ion-fab edge={true} horizontal='right' vertical='top'>
-              <ion-fab-button onClick={() => this.openMaps()}>
-                <ion-icon name='car'></ion-icon>
-              </ion-fab-button>
-            </ion-fab>
+    render() {
+        if (this.profile !== null) {
+            return (
+                <ion-page>
+                    <profile-header>
+                        <ion-back-button defaultHref='/home'/>
+                    </profile-header>
+                    <ion-content>
+                        <lazy-img id="bannerImg"
+                                  src={this.profile ? this.gateway + 'ipfs/' + this.profile.headerHashes.medium : '/assets/img/defaultItem.png'}
+                                  alt=''
+                        />
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col col-12 col-sm-12 col-md-7 col-lg-7 col-xl-7>
+                                    <ion-card>
+                                        <ion-card-content>
+                                            <ion-item >
+                                                <ion-avatar item-start>
+                                                    <img
+                                                        src={this.profile ? this.gateway + 'ipfs/' + this.profile.avatarHashes.tiny : '/assets/img/defaultItem.png'}/>
+                                                </ion-avatar>
+                                                <hr/>
+                                                <p>{this.profile ? this.profile.location : ''}</p>
+                                            </ion-item>
+                                            <hr/>
+                                            <ion-card-title>
+                                                {this.profile ? this.profile.name : '' }
+                                            </ion-card-title>
+                                            <hr/>
+                                            <h4>{this.profile ? this.profile.contactInfo.website : '' }</h4>
+                                            <h4>{this.profile ? this.profile.contactInfo.email : '' }</h4>
+                                        </ion-card-content>
+                                    </ion-card>
+                                    <store-list peerID={this.profile ? this.profile.peerID : null}
+                                                listings={this.listings}></store-list>
+                                </ion-col>
+                                <ion-col col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5>
+                                    <ion-card>
+                                        <ion-card-content>
+                                            <ion-card-title>
+                                               About {this.profile ? this.profile.name : '' }
+                                            </ion-card-title>
 
-            <ion-list no-lines>
-              <ion-item>
-                <ion-label>
-                  <h1>{this.dest}</h1>
-                </ion-label>
-              </ion-item>
+                                            <hr/>
+                                            <div innerHTML={ this.profile ? this.profile.about : "... "}/>
+                                        </ion-card-content>
+                                    </ion-card>
+                                    <ion-card>
+                                        <ion-card-content>
+                                            <ion-card-title>Ratings</ion-card-title>
+                                            <rating-list ratingHashes={this.ratingHashes}/>
+                                        </ion-card-content>
+                                    </ion-card>
+                                </ion-col>
 
-              <ion-item>
-                <ion-label>
-                  {this.directionsRequest ? <h2>{this.directionsRequest.duration.text} away</h2> : <h2>'Loading...'</h2>}
-                </ion-label>
-              </ion-item>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-content>
+                </ion-page>
+            );
+        } else {
+            return (
+                <ion-page>
+                    <profile-header>
+                        <ion-back-button defaultHref='/home'/>
+                    </profile-header>
+                    <ion-content>
+                        Loading
+                    </ion-content>
+                </ion-page>
+            );
+        }
 
-              <ion-item>
-                <ion-icon color='primary' name='pin' slot='start' size='large'></ion-icon>
-
-                <ion-label>
-                  {this.directionsRequest ? this.directionsRequest.end_address : 'Loading...'}
-                </ion-label>
-              </ion-item>
-            </ion-list>
-          </div>
-        </ion-content>
-      </ion-page>
-    );
-  }
+    }
 }

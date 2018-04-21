@@ -1,56 +1,151 @@
 import greenlet from 'greenlet';
+import {Rating} from "./interfaces";
 
-const fetchBeers = greenlet(
-  function (page: number, style: number) {
-    const key = 'c0b90d19385d7dabee991e89c24ea711';
-    const url = `https://cors-anywhere.herokuapp.com/http://api.brewerydb.com/v2/beers?key=${key}&p=${page}&styleId=${style}`;
-
-    return fetch(url).then((res) => {
-      return res.json()
-    }).then((data) => {
-      console.log(data.data);
-      return data.data;
-    })
-  }
+const getProfile = greenlet(
+    function (gateway: string, peerID: string) {
+        const url = gateway + `ipns/${peerID}/profile.json`;
+        return fetch(url).then((res) => {
+            return res.json()
+        }).then((data) => {
+            return data;
+        }).catch((err) => {
+            console.error(err);
+            return null;
+        })
+    }
 );
 
-const fetchStyles = greenlet(
-  function () {
-    const key = 'c0b90d19385d7dabee991e89c24ea711';
-    const url = `https://cors-anywhere.herokuapp.com/http://api.brewerydb.com/v2/styles?key=${key}`;
+const getListings = greenlet(
+    function (gateway: string, peerID: string) {
+        const url = gateway + `ipns/${peerID}/listings.json`;
+        return fetch(url).then((res) => {
+            return res.json()
+        }).then((data) => {
+            return data;
+        }).catch((err) => {
+            console.error(err);
+            return null;
+        })
+    }
+);
 
-    return fetch(url).then((res) => {
-      return res.json()
-    }).then((data) => {
-      return data.data;
-    })
-  }
+const getRatingHashes = greenlet(
+    function (gateway: string, peerID: string, slug: string) {
+        const url = gateway + `ipns/${peerID}/ratings.json`;
+        return fetch(url).then((res) => {
+            return res.json()
+        }).then((data:Array<Rating>) => {
+            if(slug!==undefined && slug.length>0){
+                let itemRatings = data.filter(function (obj) {
+                    return obj.slug == slug;
+                })[0];
+                if(itemRatings!==undefined){
+                    return itemRatings.ratings;
+                }else{
+                    return []
+                }
+            }else{
+                let allRatings = [];
+                for(var r of data){
+                    allRatings = allRatings.concat(r.ratings);
+                }
+                return allRatings;
+            }
+        }).catch((err) => {
+            console.error(err);
+            return null;
+        })
+    }
+);
+
+const getRating = greenlet(
+    function (gateway: string, ratingHash: string) {
+        const url = gateway + `ipfs/${ratingHash}`;
+        return fetch(url).then((res) => {
+            return res.json()
+        }).then((data) => {
+            return data;
+        }).catch((err) => {
+            console.error(err);
+            return null;
+        })
+    }
+);
+
+const getFollowers = greenlet(
+    function (gateway: string, peerID: string) {
+        const url = gateway + `ipns/${peerID}/followers.json`;
+        return fetch(url).then((res) => {
+            return res.json()
+        }).then((data) => {
+            return data;
+        }).catch((err) => {
+            console.error(err);
+            return null;
+        })
+    }
+);
+
+const getFollowing = greenlet(
+    function (gateway: string, peerID: string) {
+        const url = gateway + `ipns/${peerID}/following.json`;
+        return fetch(url).then((res) => {
+            return res.json()
+        }).then((data) => {
+            return data;
+        })
+    }
+);
+
+const getListingDetail = greenlet(
+    function (gateway: string, peerID: string, slug: string) {
+        const url = gateway + `ipns/${peerID}/listings/${slug}.json`;
+        return fetch(url).then((res) => {
+            return res.json()
+        }).then((data) => {
+            return data;
+        }).catch((err) => {
+            console.error(err);
+            return null;
+        })
+    }
 );
 
 const doSearch = greenlet(
-  function(searchTerm: string) {
-    const key = 'c0b90d19385d7dabee991e89c24ea711';
-    const url = `https://cors-anywhere.herokuapp.com/http://api.brewerydb.com/v2/search?key=${key}&q=${searchTerm}&type=beer`;
+    function (serviceUrl: string, params: Object, cors: boolean) {
 
-    return fetch(url).then((res) => {
-      return res.json()
-    }).then((data) => {
-      return data.data;
-    })
-  }
+        var serviceUrl = serviceUrl === undefined ? '' : serviceUrl;
+        var params = params === undefined ? {} : params;
+        var cors = cors === undefined ? true : cors;
+
+        let url = ``;
+        // override cors of search provider with proxy
+        if (cors == true) {
+            url += `https://cors-anywhere.herokuapp.com/`;
+        }
+
+        url += serviceUrl;
+
+        url += '?' + Object.keys(params).reduce(function (a, k) {
+                a.push(k + '=' + encodeURIComponent(params[k]));
+                return a
+            }, []).join('&');
+
+        return fetch(url).then((res) => {
+            return res.json()
+        }).then((data) => {
+            return data;
+        })
+    }
 );
 
-const getBeerDetail = greenlet(
-  function(id: string) {
-    const key = 'c0b90d19385d7dabee991e89c24ea711';
-    const url = `https://cors-anywhere.herokuapp.com/http://api.brewerydb.com/v2/beer/${id}?key=${key}`;
-
-    return fetch(url).then((res) => {
-      return res.json()
-    }).then((data) => {
-      return data.data;
-    })
-  }
-)
-
-export {fetchBeers, doSearch, getBeerDetail, fetchStyles};
+export {
+    getProfile,
+    getListings,
+    getRatingHashes,
+    getRating,
+    getFollowers,
+    getFollowing,
+    doSearch,
+    getListingDetail
+};

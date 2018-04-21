@@ -1,7 +1,6 @@
 store-item {
 
   ion-card {
-    opacity: 0;
     width: 180px !important;
   }
 
@@ -91,7 +90,7 @@ store-item {
     }
   }
 
-  .listing-item-cover {
+  .store-item-cover {
     height: 180px;
     width: 180px;
     object-fit: contain;
@@ -100,7 +99,7 @@ store-item {
     }
   }
 
-  .listing-item-cover img {
+  .store-item-cover img {
     height: 180px;
     width: 180px;
     object-fit: contain;

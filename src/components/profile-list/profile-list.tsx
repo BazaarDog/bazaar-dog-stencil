@@ -13,7 +13,7 @@ export class profileList {
   @Element() el: Element;
 
   goToDirections(address: string, dest: string) {
-    this.el.closest('ion-nav').push('profile-directions', { address, dest });
+    this.el.closest('ion-nav').push('profile-details', { address, dest });
   }
 
   render() {
@@ -23,9 +23,9 @@ export class profileList {
           {this.profiles.map((profile: Profile) => {
             let color;
 
-            if (profile.rating >= 4.0) {
+            if (profile.averageRating >= 4.0) {
               color = 'good';
-            } else if (profile.rating <= 3.9 && profile.rating > 2.9) {
+            } else if (profile.averageRating <= 3.9 && profile.averageRating > 2.9) {
               color = 'ok'
             } else {
               color = 'bad';
@@ -34,15 +34,12 @@ export class profileList {
             return (
               <ion-item>
                 <ion-avatar slot="start" class={color}>
-                  <div>{profile.rating}</div>
+                  <div>{profile.averageRating}</div>
                 </ion-avatar>
                 <ion-label>
                   <h2>{profile.name}</h2>
 
-                  <p>{profile.vicinity}</p>
-
                   <ion-buttons>
-                    <ion-button onClick={() => this.goToDirections(profile.vicinity, profile.name)} color='primary' fill='clear'> Directions </ion-button>
 
                     <share-button listing={profile}></share-button>
 

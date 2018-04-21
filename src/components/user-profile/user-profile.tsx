@@ -10,21 +10,21 @@ export class UserProfile {
 
   @Prop() userName: any;
 
-  @State() beers: any;
+  @State() listings: any;
   @State() user: any;
 
   async componentDidLoad() {
     const allData = await this.getFullUser(this.userName);
 
     if (allData[1].length > 0) {
-      this.beers = allData[1];
+      this.listings = allData[1];
     }
-    console.log(this.beers);
+    console.log(this.listings);
     this.user = allData[0];
   }
 
-  getUserBeers(email) {
-    return firebase.firestore().collection('savedBeers').where('author', '==', email).get();
+  getUserListings(email) {
+    return firebase.firestore().collection('savedListings').where('author', '==', email).get();
   }
 
   async getFullUser(name) {
@@ -40,15 +40,15 @@ export class UserProfile {
       userEmail = user.data().email;
     })
   
-    const tempBeers = [];
+    const tempListings = [];
   
-    const beerDoc = await this.getUserBeers(userEmail)
+    const listingDoc = await this.getUserListings(userEmail)
   
-    await beerDoc.forEach((doc) => {
-      tempBeers.push(doc.data().beer);
+    await listingDoc.forEach((doc) => {
+      tempListings.push(doc.data().listing);
     })
   
-    fullUser.push(tempBeers);
+    fullUser.push(tempListings);
   
     console.log(fullUser);
     return fullUser;
@@ -80,13 +80,13 @@ export class UserProfile {
 
             {/*<ion-button expand='block' color='primary' onClick={() => this.follow()}>Follow</ion-button>*/}
 
-            {this.beers ?
-              <h1>Favorite Beers</h1>
+            {this.listings ?
+              <h1>Favorite Listings</h1>
               : null
             }
 
-            {this.beers ?
-              <beer-list beers={this.beers} fave={false}></beer-list>
+            {this.listings ?
+              <listing-list listings={this.listings} fave={false}></listing-list>
               : null
             }
 

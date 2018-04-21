@@ -31,7 +31,7 @@ export class LazyImg {
   }
 
   componentWillUpdate() {
-    console.log('componentWillUpdate called', this.src, this.oldSrc);
+    //console.log('componentWillUpdate called', this.src, this.oldSrc);
     if (this.src !== this.el.querySelector('img').getAttribute('data-src')) {
       this.addIntersectionObserver();
     }
@@ -39,7 +39,7 @@ export class LazyImg {
 
   handleImage() {
     const image: HTMLImageElement = this.el.querySelector('img');
-    console.log(image.getAttribute('data-src'));
+    //console.log(image.getAttribute('data-src'));
     if (image.getAttribute('data-src')) {
       image.setAttribute('src', image.getAttribute('data-src'));
       image.onload = () => {

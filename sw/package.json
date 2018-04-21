@@ -1,0 +1,30 @@
+{
+  "name": "@BazaarDog/bazaar-dog-sw",
+  "description": "Service Workder for Bazaar Dog",
+  "version": "0.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ipfs/ipfs-service-worker.git"
+  },
+  "keywords": [
+    "IPFS",
+    "Service",
+    "Worker",
+    "Distributed"
+  ],
+  "bugs": {
+    "url": "https://github.com/BazaarDog/bazaar-dog-sw/issues"
+  },
+  "homepage": "https://github.com/BazaarDog/bazaar-dog-sw#readme",
+  "dependencies": {
+    "ipfs": "git://github.com/BazaarDog/js-ipfs#cf9f3a1f87b14cc43f032b02d20e5b11cf826e44",
+    "ipfs-postmsg-proxy": "^2.3.0"
+  },
+  "devDependencies": {
+    "standard": "^10.0.3"
+  }
+}

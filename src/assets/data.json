@@ -1,0 +1,87 @@
+{
+  "gateways": [
+    {
+      "id": "local",
+      "name": "js-ipfs",
+      "enabled": true,
+      "url": "/"
+    },
+    {
+      "id": "ob1",
+      "name": "OB1",
+      "enabled": true,
+      "url": "https://gateway.ob1.io/"
+    },
+    {
+      "id": "mock",
+      "name": "Bazaar Dog (mock)",
+      "enabled": true,
+      "url": "https://alpha.bazaar.dog/"
+    },
+    {
+      "id": "go",
+      "name": "Bazaar Dog (go-ipfs)",
+      "enabled": true,
+      "url": "https://go.bazaar.dog/"
+    },
+    {
+      "id": "node",
+      "name": "Bazaar Dog (js-ipfs)",
+      "enabled": true,
+      "url": "https://node.bazaar.dog/"
+    }
+  ],
+  "searchProviders": [
+    {
+      "id": "bazaardog",
+      "name": "Bazaar Dog",
+      "logo": "/assets/img/searchProviders/bazaarDogLogo.png",
+      "listings": "https://alpha.bazaar.dog/api/",
+      "reports": "https://alpha.bazaar.dog/reports",
+      "torlistings": "http://obfojhv6ay5fedog.onion/api/",
+      "enabled": true,
+      "cors": true
+    },
+    {
+      "id": "ob1",
+      "name": "OB1",
+      "logo": "/assets/img/searchProviders/ob1searchLogo.png",
+      "listings": "https://search.ob1.io/search/listings",
+      "reports": "https://search.ob1.io/reports",
+      "torlistings": "http://my7nrnmkscxr32zo.onion/search/listings",
+      "enabled": true,
+      "cors": true
+    },
+    {
+      "id": "blockbooth",
+      "name": "Block Booth",
+      "logo": "/assets/img/searchProviders/blockboothLogo.png",
+      "listings": "https://search.blockbooth.com/api/",
+      "reports": "",
+      "torlistings": "http://vnjzhvm5gkctyldn.onion/api/",
+      "enabled": true,
+      "cors": false
+    },
+
+    {
+      "id": "otb",
+      "name": "OnTheBlockchain",
+      "logo": "/assets/img/searchProviders/OBotbLogo.png",
+      "listings": "https://openbazaar.ontheblockchain.com/ob2search/listings",
+      "reports": "https://openbazaar.ontheblockchain.com/ob2reportsListings.php",
+      "torlistings": "",
+      "enabled": true,
+      "cors": false
+    },
+    {
+      "id": "rawflood",
+      "name": "Raw Flood",
+      "logo": "/assets/img/searchProviders/rawFloodLogo.png",
+      "listings": "https://search.rawflood.com/ob/search/listings",
+      "reports": "",
+      "torlistings": "",
+      "enabled": false,
+      "cors": false
+    }
+  ]
+}

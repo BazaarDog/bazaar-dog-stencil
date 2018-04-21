@@ -1,8 +1,8 @@
 import Storage from './storage';
-import {SearchProvider} from '../global/interfaces';
+import {Profile} from '../global/interfaces';
 ///SearchOptionInterface,
 
-export default class SearchProviderService {
+export default class PeerService {
 
     public storage: Storage = new Storage();
 
@@ -10,47 +10,47 @@ export default class SearchProviderService {
     }
 
 
-    addSearchProvider(provider: SearchProvider): void {
-        this.storage.get('searchProviders').then((providers) => {
-            if (providers !== null) {
-                providers.push(provider);
+    addPeer(peer: Profile): void {
+        this.storage.get('searchProviders').then((peers) => {
+            if (peers !== null) {
+                peers.push(peer);
             } else {
-                providers = [provider];
+                peers = [peer];
             }
-            this.storage.set('searchProviders', providers);
+            this.storage.set('searchProviders', peers);
         });
     }
 
-    removeSearchProvider(provider): void {
-        this.storage.get('searchProviders').then((providers) => {
-            providers.splice(providers.indexOf(provider), 1);
-            this.storage.set('searchProviders', providers);
+    removePeer(peer): void {
+        this.storage.get('searchProviders').then((peers) => {
+            peers.splice(peers.indexOf(peer), 1);
+            this.storage.set('searchProviders', peers);
         });
     }
 
 
-    cacheSearchResults(provider: SearchProvider, response): void {
-        this.storage.set('cachedResults-' + provider.id, response);
+    cacheSearchResults(peer: Profile, response): void {
+        this.storage.set('cachedResults-' + peer.peerID, response);
     }
 
-    getSearchProviders(): Promise<any> {
+    getPeers(): Promise<any> {
         console.log("Getting Search Providers Call");
 
-        return this.storage.get('searchProviders').then((providers) => {
-                if (providers === null) {
+        return this.storage.get('searchProviders').then((peers) => {
+                if (peers === null) {
                     console.log("No Saved Providers");
                     fetch('/assets/data.json').then((response) => {
                             response.json().then((data) => {
                                 console.log(data.searchProviders);
-                                this.setSearchProviders(data.searchProviders);
+                                this.setPeers(data.searchProviders);
                                 return data.searchProviders;
                             });
                         }
                     );
                 }
                 else {
-                    console.log("There were saved providers");
-                    return providers;
+                    console.log("There were saved peers");
+                    return peers;
                 }
             }
         );
@@ -58,9 +58,9 @@ export default class SearchProviderService {
 
     getSavedProvider(): Promise<any> {
         console.log("Getting Saved Provider");
-        return this.storage.get('lastProvider').then((provider) => {
-                //console.log(provider);
-                if (provider === null || (Object.keys(provider).length === 0)) {
+        return this.storage.get('lastPeer').then((peer) => {
+                //console.log(peer);
+                if (peer === null || (Object.keys(peer).length === 0)) {
                     console.log("No Previous Serarch Provider");
                     fetch('/assets/data.json').then((response) => {
                             response.json().then((data) => {
@@ -74,19 +74,19 @@ export default class SearchProviderService {
                     );
                 } else {
                     console.log("Stored Serarch Provider");
-                    console.log(JSON.stringify(provider));
-                    return provider;
+                    console.log(JSON.stringify(peer));
+                    return peer;
                 }
             }
         );
     }
 
-    setSavedProvider(provider: SearchProvider): void {
-        this.storage.set('lastProvider', provider);
+    setSavedProvider(peer: Profile): void {
+        this.storage.set('lastPeer', peer);
     }
 
-    setSearchProviders(providers: Array<SearchProvider>): void {
-        this.storage.set('searchProviders', providers);
+    setPeers(peers: Array<Profile>): void {
+        this.storage.set('searchProviders', peers);
     }
 
 }

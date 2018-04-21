@@ -1,7 +1,5 @@
 import { Component, Element, Event, EventEmitter, Prop, State } from '@stencil/core';
 
-declare var firebase: any;
-
 @Component({
   tag: 'post-img',
   styleUrl: 'post-img.scss'
@@ -33,7 +31,7 @@ export class PostImg {
   async handleImage() {
     const image: HTMLImageElement = this.el.querySelector('img');
 
-    const storage = firebase.storage();
+    const storage = null //firebase.storage();
     const imagePath = storage.ref(this.src);
 
     const url = await imagePath.getDownloadURL();

@@ -1,179 +1,155 @@
-import { Component, Prop, Element, Event, EventEmitter } from '@stencil/core';
-import { AlertController, ToastController } from '@ionic/core';
+import {Component, Prop, Element, Event, State, EventEmitter} from '@stencil/core';
+import {AlertController, ToastController} from '@ionic/core';
 
-import { Listing } from '../../global/interfaces';
-import { checkAnon } from '../../global/utils';
-
-// import firebase from 'firebase';
-
-declare var firebase: any;
+import {ListingCard} from '../../global/interfaces';
+//import {checkAnon} from '../../global/utils';
+import { ActiveRouter } from '@stencil/router';
 
 @Component({
-  tag: 'listing-item',
-  styleUrl: 'listing-item.scss'
+    tag: 'listing-item',
+    styleUrl: 'listing-item.scss'
 })
+
 export class ListingItem {
 
-  @Prop() listing: Listing;
-  @Prop() fave: Boolean = false;
-  @Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
-  @Prop({ connect: 'ion-alert-controller' }) alertCtrl: AlertController;
+    @State() gateway: string = 'https://gateway.ob1.io/';
 
-  @Element() el: HTMLElement;
+    @Prop() listing: ListingCard;
+    @Prop() fave: Boolean = false;
+    @Prop({connect: 'ion-toast-controller'}) toastCtrl: ToastController;
+    @Prop({connect: 'ion-alert-controller'}) alertCtrl: AlertController;
+    @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
 
-  @Event() listingDeleted: EventEmitter;
+    @Element() el: HTMLElement;
 
-  io: IntersectionObserver;
+    @Event() listingDeleted: EventEmitter;
 
-  componentDidLoad() {
-    this.addIntersectionObserver();
-  }
+    io: IntersectionObserver;
 
-  addIntersectionObserver() {
-    if ('IntersectionObserver' in window) {
-      this.io = new IntersectionObserver((data: IntersectionObserverEntry[]) => {
-        // because there will only ever be one instance
-        // of the element we are observing
-        // we can just use data[0]
-        if (data[0].isIntersecting) {
-          this.handleAnimation(data[0].target);
-          this.removeIntersectionObserver();
+    componentDidLoad() {
+
+    }
+
+
+    removeIntersectionObserver() {
+        if (this.io) {
+            this.io.disconnect();
+            this.io = null;
         }
-      }, {
-          threshold: [0.2]
-        })
-
-      this.io.observe(this.el.querySelector('ion-card'));
-    } else {
-      this.el.querySelector('ion-card').style.opacity = '1';
     }
-  }
 
-  removeIntersectionObserver() {
-    if (this.io) {
-      this.io.disconnect();
-      this.io = null;
+
+
+    async save(listing: ListingCard) {
+        console.log('here');
+        this.saveListing(listing);
+        const toast = await this.toastCtrl.create({message: 'listing favorited', duration: 1000});
+        toast.present();
+
     }
-  }
 
-  handleAnimation(element: any) {
-    if ('animate' in element) {
-      element.animate(
-        [
-          { transform: 'translateY(20px)', opacity: 0 },
-          { transform: 'translateY(0)', opacity: 1 }
-        ], {
-          duration: 300,
-          easing: 'cubic-bezier(.36,.66,.04,1)',
-          fill: 'forwards'
-        }
-      )
-    } else {
-      this.el.querySelector('ion-card').style.opacity = '1';
+    async deleteListing(listing: ListingCard) {
+        await this.deleteListingHelper(listing);
+
+        this.listingDeleted.emit();
+
+        const toast = await this.toastCtrl.create({message: 'listing un-favorited', duration: 1000});
+        toast.present();
     }
-  }
 
-  async save(listing: Listing) {
-    console.log('here');
-    if (!checkAnon()) {
-      this.saveListing(listing);
-
-      const toast = await this.toastCtrl.create({ message: 'listing favorited', duration: 1000 });
-      toast.present();
-    } else {
-      const alert = await this.alertCtrl.create({
-        title: 'Must login',
-        message: 'This feature is not available to anonymous users. Would you like to sign in with Google?',
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            cssClass: 'secondary',
-            handler: () => {
-              console.log('Confirm Cancel: blah');
-            }
-          }, {
-            text: 'Yes',
-            handler: () => {
-              const provider = new firebase.auth.GoogleAuthProvider();
-              firebase.auth().currentUser.linkWithRedirect(provider);
-            }
-          }
-        ]
-      });
-      return await alert.present();
+    saveListing(value: ListingCard) {
+        console.log(value)
+        // TODO refactor for local storage
+        //firebase.firestore().collection('savedListings').add({
+        //    author: firebase.auth().currentUser.email,
+        //    listing: value
+        //});
     }
-  }
 
-  async deleteListing(listing: Listing) {
-    await this.deleteListingHelper(listing);
+    async deleteListingHelper(passedListing: ListingCard) {
+        console.log(passedListing.data.title)
+        // TODO refactor for local storage
+        //const doc = await firebase.firestore().collection('savedListings')
+        //    .where('listing.title', '==', passedListing.data.title)
+        //    .where('author', '==', (window as any).firebase.auth().currentUser.email)
+        //    .get();
 
-    this.listingDeleted.emit();
+        //doc.forEach((listing) => {
+        //    listing.ref.delete();
+        //})
+    }
 
-    const toast = await this.toastCtrl.create({ message: 'listing un-favorited', duration: 1000 });
-    toast.present();
-  }
+    navigateToDetail(peerId: string, slug: string) {
+        this.el.closest('ion-nav').push('listing-detail', {'peerId':peerId,'slug':slug});
+    }
 
-  saveListing(value: Listing) {
-    firebase.firestore().collection('savedListings').add({
-      author: firebase.auth().currentUser.email,
-      listing: value
-    });
-  }
+    navigateToProfile(peerId: string) {
+        this.el.closest('ion-nav').push('profile-detail', {'peerId':peerId});
+    }
 
-  async deleteListingHelper(passedListing: Listing) {
-    const doc = await firebase.firestore().collection('savedListings')
-      .where('listing.name', '==', passedListing.name)
-      .where('author', '==', (window as any).firebase.auth().currentUser.email)
-      .get();
 
-    doc.forEach((listing) => {
-      listing.ref.delete();
-    })
-  }
 
-  navigateToDetail(listingId: string) {
+    render() {
+        return (
+            <ion-card>
 
-    this.el.closest('ion-nav').push('listing-detail', { listingId });
-  }
+                    <lazy-img class='listing-item-cover'
+                              src={this.listing.data.thumbnail ? this.gateway + 'ipfs/' + this.listing.data.thumbnail.small : '/assets/img/defaultItem.png'}
+                              alt='listing'
+                              onClick={() => this.navigateToDetail(this.listing.relationships.vendor.data.peerID, this.listing.data.slug)}
 
-  render() {
-    return (
-      <ion-card>
-        <lazy-img src={this.listing.thumbnail ? this.listing.thumbnail.medium : '/assets/defaultItem.png'} alt='listing' />
-        <ion-card-content>
-          <ion-card-title>
-            {this.listing.title}
-          </ion-card-title>
+                    />
+                <ion-card-content >
+                    <p>
+                        {this.listing.data.title}
+                    </p>
 
-          <!--p>
-            {this.listing.description ? this.listing.description : 'No description available'}
-          </p-->
+                    <ion-buttons>
 
-          <ion-buttons>
-            {this.fave ?
-              <ion-button color='danger' onClick={() => this.deleteListing(this.listing)} fill='clear' icon-only>
-                <ion-icon name='trash'></ion-icon>
-              </ion-button>
-              :
-              <ion-button color='primary' onClick={() => this.save(this.listing)} fill='clear' icon-only>
-                <ion-icon name='star'></ion-icon>
-              </ion-button>
-            }
+                            <div class='avatarDiv'>
+                                <lazy-img class="avatarImg"
+                                          src={this.listing.relationships.vendor.data.avatarHashes.tiny ? this.gateway + 'ipfs/' + this.listing.relationships.vendor.data.avatarHashes.tiny : '/assets/img/defaultAvatar.png'}
+                                          alt=''
+                                          onClick={() => this.navigateToProfile(this.listing.relationships.vendor.data.peerID)}
+                                />
+                            </div>
 
-            <share-button listing={this.listing}></share-button>
 
-            <div id='anchorDiv'>
-              <ion-anchor href={`/home/listing/${this.listing.slug}`}>
-                <ion-button slot='end' onClick={() => this.navigateToDetail(this.listing.slug)} id='detailButton' color='primary' fill='clear'>
-                  Detail
-              </ion-button>
-              </ion-anchor>
-            </div>
 
-          </ion-buttons>
-        </ion-card-content>
-      </ion-card>
-    );
-  }
+                        <span class='infoDiv'>
+                        <ion-buttons>
+                            <ion-button color='primary'
+                                        onClick={() => this.navigateToDetail(this.listing.relationships.vendor.data.peerID, this.listing.data.slug)}
+                                        fill='clear' icon-only>
+                                {this.listing.data.averageRating.toPrecision(2)}
+                                <ion-icon name='star'>
+                                </ion-icon>
+                                ({this.listing.data.ratingCount})
+                            </ion-button>
+                            {this.fave ?
+                                <ion-button color='danger' onClick={() => this.deleteListing(this.listing)} fill='clear'
+                                            icon-only>
+                                    <ion-icon name='trash'></ion-icon>
+                                </ion-button>
+                                :
+                                <ion-button color='primary' onClick={() => this.save(this.listing)} fill='clear'
+                                            icon-only>
+                                    <ion-icon name='bookmark'></ion-icon>
+                                </ion-button>
+                            }
+
+                            <span
+                                class="priceLabel"> {this.listing.data.price.amount / 100} {this.listing.data.price.currencyCode}</span>
+                        </ion-buttons>
+                            <div>
+                            <p class="vendorName"> {this.listing.relationships.vendor.data.name}</p>
+                            </div>
+
+                        </span>
+
+                    </ion-buttons>
+                </ion-card-content>
+            </ion-card>
+        );
+    }
 }

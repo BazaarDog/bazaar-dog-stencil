@@ -1,0 +1,20 @@
+xui-dropdown:focus {
+  outline: none;
+}
+
+xui-dropdown .ui.dropdown {
+  z-index: 9 !important;
+  max-width: 98% !important;
+}
+
+.ui.dropdown.section{
+  max-width: 100%;
+}
+
+ui.section.dropdown{
+  max-width: 100%;
+}
+ui.dropdown.visible.active{
+  position: absolute;
+  z-index: 99 !important;
+}

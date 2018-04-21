@@ -2,8 +2,9 @@
   "name": "@BazaarDog/bazaar-dog-sw",
   "description": "Service Workder for Bazaar Dog",
   "dependencies": {
-    "ipfs": "git://github.com/BazaarDog/js-ipfs#cf9f3a1f87b14cc43f032b02d20e5b11cf826e44",
-    "ipfs-postmsg-proxy": "^2.3.0"
+    "cors": "^2.8.4",
+    "node-fetch": "^1.7.3",
+    "ipfs": "git://github.com/BazaarDog/js-ipfs.git#cf9f3a1f87b14cc43f032b02d20e5b11cf826e44",
   },
   "private": true
 }

@@ -1,22 +1,23 @@
 import { Component, Prop } from '@stencil/core';
 
-import {ListingCard} from '../../global/interfaces';
+import {Listing} from '../../global/interfaces';
 
 
 @Component({
-  tag: 'listing-list',
-  styleUrl: 'listing-list.scss'
+  tag: 'store-list',
+  styleUrl: 'store-list.scss'
 })
-export class ListingList {
+export class StoreList {
 
-  @Prop() listings: Array<ListingCard>;
+  @Prop() listings: Array<Listing>;
+  @Prop() peerID: string;
   @Prop() fave: Boolean;
 
   render() {
     if (this.listings) {
       const listings = this.listings.map((listing) => {
         return (
-          <listing-item fave={this.fave} listing={listing} ></listing-item>
+          <store-item fave={this.fave} peerID={this.peerID} listing={listing} ></store-item>
         )
       });
 

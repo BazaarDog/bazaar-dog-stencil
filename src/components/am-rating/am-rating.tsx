@@ -164,8 +164,8 @@ export class AMRating {
         <svg
           viewBox={this.svgViewBox}
           version="1.1"
-          width='12px'
-          height = '12px'
+          width='8px'
+          height = '8px'
           xmlns="http://www.w3.org/2000/svg"
           class="rating-item"
           onMouseDown={ () => this.handleMouseDown(event) }
@@ -196,6 +196,7 @@ export class AMRating {
             </g>
         </svg>
         )}
+        &nbsp;&nbsp;<slot/>
       </div>
     );
   }

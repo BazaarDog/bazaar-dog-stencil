@@ -1,15 +1,37 @@
-beer-list {
+listing-list {
 
   ion-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   }
 
   #fake-card {
     margin: 1.5em;
-    height: 400px;
+    height: 180px;
     background-image: linear-gradient(100deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 80%), linear-gradient(lightgray 20px, transparent 0), linear-gradient(lightgray 20px, transparent 0), linear-gradient(lightgray 100px, transparent 0);
     background-size: 100% 220px;
     background-position: 10px 0, 10px 120px, 10px 160px;
+  }
+
+  &.left-sidebar-in {
+    & > div {
+      height: 100vh;
+      padding-right: 50px;
+    }
+
+    .icon-menu {
+      display: none;
+    }
+
+    .icon-close {
+      display: block;
+    }
+  }
+
+}
+
+@media screen and (max-width: 700px) {
+  bazaar-dog-stencil {
+    display: block;
   }
 }
