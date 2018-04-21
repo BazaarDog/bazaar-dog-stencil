@@ -1,8 +1,32 @@
-# bar-page
+# beer-list
 
 
 
 <!-- Auto Generated Below -->
+
+
+## Properties
+
+#### beers
+
+
+
+
+#### fave
+
+
+
+
+## Attributes
+
+#### beers
+
+
+
+
+#### fave
+
+
 
 
 

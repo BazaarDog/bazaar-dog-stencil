@@ -1,43 +1,30 @@
-profile-page {
-
-  ion-page {
-    background: white;
+bar-page {
+  lazy-img img {
+    height: 224px;
   }
 
-  ion-scroll {
-    padding-left: 10px;
-    padding-right: 10px;
+  ion-label {
+    margin-bottom: -5px !important;
   }
 
-  #profileButtonBlock {
-    display: flex;
-    justify-content: center;
-    position: fixed;
-    bottom: 32px;
-    left: 0;
-    width: 100%;
+  @media (min-width: 550px) {
+    ion-scroll {
+      padding-left: 3em;
+      padding-right: 3em;
+    }
   }
 
-  #logoutButton {
-    padding-left: 15px;
+  @media (min-width: 800px) {
+    ion-scroll {
+      padding-left: 12em;
+      padding-right: 12em;
+    }
   }
 
-  #imageBlock {
-    display: flex;
-    justify-content: center;
-    margin-top: 3em;
-  }
-
-  #imageBlock img {
-    height: 10em;
-    border-radius: 50%;
-  }
-
-  h2 {
-    text-align: center;
-  }
-
-  p {
-    text-align: center;
+  @media (min-width: 1200px) {
+    ion-scroll {
+      padding-left: 23em;
+      padding-right: 23em;
+    }
   }
 }

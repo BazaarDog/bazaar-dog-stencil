@@ -1,8 +1,13 @@
-# bar-page
+# popover-page
 
 
 
 <!-- Auto Generated Below -->
+
+
+## Events
+
+#### closePopover
 
 
 

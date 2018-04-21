@@ -1,8 +1,37 @@
-# bar-page
+# beer-item
 
 
 
 <!-- Auto Generated Below -->
+
+
+## Properties
+
+#### beer
+
+
+
+
+#### fave
+
+
+
+
+## Attributes
+
+#### beer
+
+
+
+
+#### fave
+
+
+
+
+## Events
+
+#### beerDeleted
 
 
 

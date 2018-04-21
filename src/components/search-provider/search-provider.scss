@@ -1,0 +1,53 @@
+provider-menu {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 90%;
+  z-index: 20;
+  background-color: transparent !important;
+  padding: 10px;
+}
+
+
+options-menu {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 90%;
+  z-index: 20;
+  background-color: transparent !important;
+  padding: 10px;
+}
+
+
+actual-menu {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 250px;
+  min-height: 100%;
+  background-color: white;
+  z-index: 30;
+}
+
+#searchOptionsIcon{
+  font-size: 2em;
+}
+
+menu-button {
+  width: 100%;
+  margin: 0px;
+  padding: 10px;
+}
+
+menu-background {
+  position: absolute;
+  background-color: rgba(38,38,38, 0.2);
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  min-height: 100%;
+  z-index: 5;
+}

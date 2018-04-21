@@ -1,13 +1,7 @@
-import { Component, State, Prop } from '@stencil/core';
-// import { RouterHistory } from '@stencil/router';
-
+import { Component, State, Prop, Listen } from '@stencil/core';
 import { ToastController } from '@ionic/core';
 
-import { notify } from '../../global/notify-service';
-
-// import firebase from 'firebase';
-
-declare var firebase: any;
+import { Profile } from '../../global/interfaces';
 
 @Component({
   tag: 'profile-page',
@@ -15,131 +9,67 @@ declare var firebase: any;
 })
 export class ProfilePage {
 
-  @State() user: any;
-  @State() subscribed: boolean;
-  @State() swSupport: boolean;
+  @State() profiles: Array<Profile>;
 
-  @Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
   @Prop({ context: 'isServer' }) private isServer: boolean;
-
-  componentWillLoad() {
-    if (!this.isServer) {
-      this.user = firebase.auth().currentUser;
-
-      if ('serviceWorker' in navigator && 'PushManager' in window) {
-        this.swSupport = true;
-      } else {
-        this.swSupport = false;
-      }
-    }
-  }
+  @Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
 
   componentDidLoad() {
     if (!this.isServer) {
-      navigator.serviceWorker.getRegistration().then((reg: ServiceWorkerRegistration) => {
-        if (reg) {
-          reg.pushManager.getSubscription().then((sub: PushSubscription) => {
-            if (sub) {
-              this.subscribed = true;
-            } else {
-              this.subscribed = false;
-            }
-          })
+      navigator.geolocation.getCurrentPosition((position: Position) => {
+        try {
+          this.getProfiles(position);
         }
-      })
-    }
-  }
-
-  unsubscribe() {
-    navigator.serviceWorker.getRegistration().then((reg: ServiceWorkerRegistration) => {
-      reg.pushManager.getSubscription().then((sub: PushSubscription) => {
-        sub.unsubscribe();
-      })
-    })
-  }
-
-  async logout() {
-    console.log('here');
-    try {
-      await firebase.auth().signOut();
-      // this.history.replace('/', {});
-      document.querySelector('ion-nav').setRoot('auth-page');
-    } catch (e) {
-      this.showErrorToast();
+        catch (err) {
+          this.showErrorToast();
+        }
+      });
     }
   }
 
   async showErrorToast() {
-    const toast = await this.toastCtrl.create({ message: 'Error logging out', duration: 1000 });
+    const toast = await this.toastCtrl.create({ message: 'Error loading data', duration: 1000 });
     toast.present();
   }
 
-  async notications() {
-    const perm = await notify();
-    console.log(perm);
+  async getProfiles(position: Position) {
+    const response = await fetch('/googlePlaces', {
+      method: 'post',
+      body: JSON.stringify({ lat: position.coords.latitude, long: position.coords.longitude })
+    })
+    const data = await response.json();
+    console.log(data);
 
-    if (perm) {
-      this.subscribed = true;
-    } else {
-      this.subscribed = false;
-    }
+    this.profiles = data;
+  }
+
+  @Listen('ionInput')
+  search(ev) {
+    setTimeout(() => {
+      const term = ev.detail.target.value;
+      console.log(term);
+      console.log(this.profiles);
+
+      this.profiles = this.profiles.filter((profile) =>
+        profile.name.toLowerCase().indexOf(term.toLowerCase()) > -1
+      );
+    }, 1000);
   }
 
   render() {
-    if (this.user && this.swSupport) {
-      return (
-        <ion-page class='show-page'>
-          <ion-header md-height="96px">
-            <ion-toolbar color='dark'>
-              <ion-buttons slot="start">
-                <ion-back-button defaultHref='/home' />
-              </ion-buttons>
-              <ion-title>IonicBeer</ion-title>
-            </ion-toolbar>
-          </ion-header>
-
-          <ion-content padding>
-            <div id='imageBlock'>
-              <img src={this.user.photoURL}></img>
-            </div>
-
-            <h2>{this.user.displayName}</h2>
-            <p>{this.user.email}</p>
-
-            <div id='profileButtonBlock'>
-              {this.subscribed ? <ion-button onClick={() => this.unsubscribe()} expand='block' color='danger'>Unsubscribe</ion-button>
-                : <ion-button onClick={() => this.notications()} expand='block' color='primary'>Get Notifications</ion-button>
-              }
-
-              <ion-button onClick={() => this.logout()} id='logoutButton' expand='block' color='danger'>Logout</ion-button>
-            </div>
-          </ion-content>
-        </ion-page>
-      );
-    } else if (this.user && !this.swSupport) {
+    return (
       <ion-page class='show-page'>
-        <ion-header md-height="96px">
-          <ion-toolbar color='dark'>
-            <ion-buttons slot="start">
-              <ion-back-button defaultHref='/home' />
-            </ion-buttons>
-            <ion-title>IonicBeer</ion-title>
-          </ion-toolbar>
-        </ion-header>
+        <profile-header>
+        </profile-header>
 
-        <ion-content padding>
-          <div id='imageBlock'>
-            <img src={this.user.photoURL}></img>
-          </div>
+        <ion-toolprofile color='dark'>
+          <ion-searchprofile></ion-searchprofile>
+        </ion-toolprofile>
 
-          <h2>{this.user.displayName}</h2>
-          <p>{this.user.email}</p>
-
-          <div id='noSwProfileButtonBlock'>
-            <ion-button onClick={() => this.logout()} id='logoutButton' expand='block' color='danger'>Logout</ion-button>
-          </div>
+        <ion-content>
+          <profile-list profiles={this.profiles}></profile-list>
         </ion-content>
       </ion-page>
-    }
+    );
   }
 }
