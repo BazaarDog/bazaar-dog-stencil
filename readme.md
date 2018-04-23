@@ -43,3 +43,42 @@ To build the app for production, run:
 npm run build
 ```
 
+## Road Map
+
+lighthouse
+- [ ] make splash landing page.
+- [ ] remove unused css
+- [ ] reduce DOM elements
+
+routing
+- [ ] test External Ref Routing issues
+- [ ] Link using providerQ param in search
+
+storage
+- [ ] generation from seed phrase
+- [ ] set up IPFS
+- [ ] integrate ping tests
+
+listing-page
+- [ ] page size
+- [ ] sortBy dropdown
+- [ ] results count
+- [ ] display param
+- [ ] fix search databinding
+
+Infrastructure
+- [ ] mock gw
+- [ ] node gw
+- [ ] go gw
+
+settings menu
+- [ ] gateways
+- [ ] searchProviders
+- [ ] defaultCurrency
+- [ ] get/set seed
+
+features
+- [ ] saveSearch
+- [ ] favorites
+
+

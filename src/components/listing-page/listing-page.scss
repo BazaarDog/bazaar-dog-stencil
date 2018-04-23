@@ -83,20 +83,28 @@ listing-page {
     flex-direction: column;
     justify-content: center;
   }
+
+  #to-top-fab{
+    position: fixed;
+    bottom: 60px;
+    right: -10px;
+  }
+
+  #search-menu-fab{
+    position: fixed;
+    top: 100px;
+    left: -15px;
+  }
+
+  .content-menu-left{
+    margin-left: 180px !important;
+  }
+
+  .content-flush-left{
+    margin-left: 0px !important;
+  }
 }
 
-#search-menu-fab{
-  position: fixed;
-  top: 100px;
-  left: -15px;
-}
 
-.content-menu-left{
-  margin-left: 180px !important;
-}
-
-.content-flush-left{
-  margin-left: 0px !important;
-}
 
 

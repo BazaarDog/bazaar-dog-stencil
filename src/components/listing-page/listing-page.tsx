@@ -45,13 +45,13 @@ export class ListingPage {
     ];
 
 
-    @Element() menuElement: HTMLElement;
     @State() isLeftSidebarIn: boolean;
 
     @State() listings: Array<ListingCard>;
     @State() pagination: PaginationInterface;
     @State() options: Map<SearchOptionInterface>;
     @State() param: Map<any>;
+    @State() scroll: number;
     @State() sortBy: Map<SortByItems>;
     @State() storedSearchProvider: SearchProvider;
     @State() searchProviders: Array<SearchProvider>;
@@ -155,7 +155,7 @@ export class ListingPage {
     }
 
     async showErrorToast() {
-        const toast = await this.toastCtrl.create({message: 'Error loading data', duration: 1000});
+        const toast = await this.toastCtrl.create({message: 'Error loading data', duration: 4000});
         toast.present();
     }
 
@@ -259,16 +259,27 @@ export class ListingPage {
         document.getElementById("content-area").classList.remove('content-flush-left');
     }
 
+    scrollToTop(){
+        document.getElementById("listing-topbar").scrollIntoView();
+
+       console.log("scroll");
+        window.requestAnimationFrame(() => {
+            window.scrollTo(0, 0);
+        })
+    }
+
     // Listen to the onSearchParamChange event from the option component
     @Listen('onSearchProviderChange')
     changeProvider(event) {
         console.log("onSearchProviderChange recieved by listing-page");
         event.stopPropagation();
-        this.listings = null;
-        this.options = null;
+        this.listings = [];
+        this.scrollToTop();
+        this.options = {};
         this.storedSearchProvider = this.searchProviders.filter(function (obj) {
             return obj.id == event.detail;
         })[0];
+
 
         this.searchProviderService.setSavedProvider(this.storedSearchProvider);
         this.param = {'q':this.param['q'], 'p':0};
@@ -280,6 +291,7 @@ export class ListingPage {
     update(event) {
         //console.log("onSearchParamChange recieved by listing-page");
         this.listings = [];
+        this.scrollToTop();
         this.param['p'] = 0;
         this.param[event.detail.param] = event.detail.value;
         setTimeout(async () => {
@@ -299,7 +311,7 @@ export class ListingPage {
     render() {
         return (
 
-            <ion-page class='show-page'>
+            <ion-page class='show-page' onScroll={() => this.scrollToTop()}>
 
                 <profile-header></profile-header>
 
@@ -315,7 +327,7 @@ export class ListingPage {
                 </ion-toolbar>
 
 
-                <ion-content class="card-background-page">
+                <ion-content class="card-background-page" >
                     <div>
                         <div id="search-menu" class="search-menu">
                             <br/><br/>
@@ -327,8 +339,9 @@ export class ListingPage {
                             <search-menu options={this.options}></search-menu>
                             <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                         </div>
-                        <div id="content-area">
-                            <listing-list fave={false} listings={this.listings}></listing-list>
+                        <div id="content-area" >
+                            <div id="listing-topbar"></div>
+                            <listing-list fave={false} listings={this.listings} ></listing-list>
                             <ion-infinite-scroll id="infinite-scroll">
                                 <ion-infinite-scroll-content
                                     loadingSpinner="bubbles"
@@ -337,9 +350,12 @@ export class ListingPage {
                             </ion-infinite-scroll>
                         </div>
                     </div>
-
                 </ion-content>
-
+                <ion-fab vertical='bottom' horizontal='right'>
+                        <ion-fab-button onClick={() => this.scrollToTop()} color='primary' >
+                            <ion-icon name='arrow-up'></ion-icon>
+                        </ion-fab-button>
+                </ion-fab>
             </ion-page>
         );
     }

@@ -42,8 +42,8 @@ export class SearchOption {
     @Method()
     onSearchParamRadioActivated(event) {
         this.selectedValue = event.target.value;
-        console.log("Radio Change Activated");
-        console.log(JSON.stringify(event.target.value));
+        //console.log("Radio Change Activated");
+        //console.log(JSON.stringify(event.target.value));
         this.onSearchParamChange.emit({
             'param' : this.param,
             'value' : this.selectedValue
@@ -52,8 +52,8 @@ export class SearchOption {
 
     @Method()
     onSearchParamCheckboxActivated(event) {
-        console.log("Checkbox Change Activated");
-        console.log(JSON.stringify(event.target.checked));
+        //console.log("Checkbox Change Activated");
+        //console.log(JSON.stringify(event.target.checked));
         this.selectedValue = event.target.checked;
         this.onSearchParamChange.emit({
             'param' : this.param,
@@ -63,8 +63,8 @@ export class SearchOption {
 
     @Method()
     onSearchParamDropdownActivated(event) {
-        console.log("Dropdown Change Activated");
-        console.log(JSON.stringify(event.target.value));
+        //console.log("Dropdown Change Activated");
+        //console.log(JSON.stringify(event.target.value));
         if((this.selectedValue !== event.target.value) && (event.target.value !== undefined)){
             this.selectedValue = event.target.value;
             this.onSearchParamChange.emit({
@@ -134,7 +134,7 @@ export class SearchOption {
             return (
 
                 <ion-list>
-                    <div id='fake-card'>Did parse Search Option</div>
+                    <div id='fake-card'>Search options are not loaded</div>
                 </ion-list>
             )
         }

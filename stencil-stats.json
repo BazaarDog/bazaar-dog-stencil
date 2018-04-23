@@ -2109,7 +2109,7 @@
       "bundles": [
         {
           "fileName": "search-menu.ios.js",
-          "size": 8662,
+          "size": 8680,
           "outputs": [
             "www/build/app/search-menu.ios.js"
           ],
@@ -2117,7 +2117,7 @@
         },
         {
           "fileName": "search-menu.md.js",
-          "size": 8338,
+          "size": 8356,
           "outputs": [
             "www/build/app/search-menu.md.js"
           ],
@@ -2258,7 +2258,7 @@
       "bundles": [
         {
           "fileName": "listing-item.js",
-          "size": 13716,
+          "size": 14165,
           "outputs": [
             "www/build/app/listing-item.js"
           ]
@@ -2543,7 +2543,7 @@
       "bundles": [
         {
           "fileName": "xui-dropdown.ios.js",
-          "size": 16140,
+          "size": 23502,
           "outputs": [
             "www/build/app/xui-dropdown.ios.js"
           ],
@@ -2551,7 +2551,7 @@
         },
         {
           "fileName": "xui-dropdown.md.js",
-          "size": 16184,
+          "size": 23546,
           "outputs": [
             "www/build/app/xui-dropdown.md.js"
           ],
@@ -3134,7 +3134,7 @@
       "bundles": [
         {
           "fileName": "listing-page.ios.js",
-          "size": 158892,
+          "size": 159595,
           "outputs": [
             "www/build/app/listing-page.ios.js"
           ],
@@ -3142,7 +3142,7 @@
         },
         {
           "fileName": "listing-page.md.js",
-          "size": 135749,
+          "size": 136452,
           "outputs": [
             "www/build/app/listing-page.md.js"
           ],
