@@ -42,6 +42,8 @@ export default class SearchProviderService {
                     fetch('/assets/data.json').then((response) => {
                             response.json().then((data) => {
                                 this.setSearchProviders(data.searchProviders);
+                                console.log("returning search providers:");
+                                console.log(data.searchProviders);
                                 return data.searchProviders;
                             });
                         }

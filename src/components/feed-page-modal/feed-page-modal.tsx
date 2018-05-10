@@ -1,7 +1,7 @@
 import { Component, Element, Listen, Prop, State } from '@stencil/core';
 import { AlertController } from '@ionic/core';
 
-
+declare var firebase: any;
 
 @Component({
   tag: 'feed-page-modal',
@@ -24,7 +24,7 @@ export class FeedPageModal {
   fileToUpload: File;
 
   componentDidLoad() {
-    this.storage = null //firebase.storage();
+    this.storage = null;//firebase.storage();
     this.rootRef = this.storage.ref();
   }
 
@@ -79,14 +79,13 @@ export class FeedPageModal {
 
   async submit() {
     if (this.postValue && this.beerNameValue && this.ratingValue) {
-      // TODO refactor for local storage
-      //fb.firestore().collection('feed').add({
-      //  author: firebase.auth().currentUser.email,
-      //  postText: this.postValue,
-      //  title: this.beerNameValue,
-      //  rating: this.ratingValue,
-      //  image: this.imageRef ? this.imageRef.fullPath : null
-      //});
+      firebase.firestore().collection('feed').add({
+        author: firebase.auth().currentUser.email,
+        postText: this.postValue,
+        title: this.beerNameValue,
+        rating: this.ratingValue,
+        image: this.imageRef ? this.imageRef.fullPath : null
+      });
 
       if (this.imageRef) {
         await this.imageRef.put(this.fileToUpload);
@@ -95,7 +94,7 @@ export class FeedPageModal {
       this.dismiss();
     } else {
       const alert = await this.alertCtrl.create({
-        title: 'Cant Submit',
+        header: 'Cant Submit',
         message: 'You must enter a post, title and rating to submit. Would you like to discard this post?',
         buttons: [
           {
@@ -120,7 +119,7 @@ export class FeedPageModal {
 
   async cancel() {
     const alert = await this.alertCtrl.create({
-      title: 'Discard Post?',
+      header: 'Discard Post?',
       buttons: [
         {
           text: 'Cancel',
@@ -143,42 +142,42 @@ export class FeedPageModal {
 
   render() {
     return (
-      <ion-page>
-        <ion-header>
-          <ion-toolbar color='dark'>
-            <ion-title>New Post</ion-title>
+        <ion-page>
+          <ion-header>
+            <ion-toolbar color='dark'>
+              <ion-title>New Post</ion-title>
 
-            <ion-buttons slot="end">
-              <ion-button onClick={() => this.cancel()}>Cancel</ion-button>
-              <ion-button onClick={() => this.submit()}>Post</ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
+              <ion-buttons slot="end">
+                <ion-button onClick={() => this.cancel()}>Cancel</ion-button>
+                <ion-button onClick={() => this.submit()}>Post</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
 
-        <ion-content padding class="outer-content">
-          <ion-item>
-            <ion-label floating>Beer Name</ion-label>
-            <ion-input value={this.beerNameValue} onInput={(event) => { this.handleBeerNameValue(event) }} required></ion-input>
-          </ion-item>
+          <ion-content padding class="outer-content">
+            <ion-item>
+              <ion-label >Beer Name</ion-label>
+              <ion-input value={this.beerNameValue} onInput={(event) => { this.handleBeerNameValue(event) }} required></ion-input>
+            </ion-item>
 
-          <ion-item>
-            <ion-label floating>New Post</ion-label>
-            <ion-textarea value={this.postValue} onInput={(event) => { this.handlePostValue(event) }} required></ion-textarea>
-          </ion-item>
+            <ion-item>
+              <ion-label >New Post</ion-label>
+              <ion-textarea value={this.postValue} onInput={(event) => { this.handlePostValue(event) }} required></ion-textarea>
+            </ion-item>
 
-          <h3>Rating</h3>
-          <ion-item>
-            <ion-range color='primary' min={0} max={5} snaps={true}></ion-range>
-          </ion-item>
+            <h3>Rating</h3>
+            <ion-item>
+              <ion-range color='primary' min={0} max={5} snaps={true}></ion-range>
+            </ion-item>
 
-          <div id='modalButtonBlock'>
-            <ion-button onClick={() => this.takePicture()} expand='block' color='primary'>Add Picture</ion-button>
-          </div>
+            <div id='modalButtonBlock'>
+              <ion-button onClick={() => this.takePicture()} expand='block' color='primary'>Add Picture</ion-button>
+            </div>
 
-          {this.imageSrc ? <img src={this.imageSrc} alt='Image to upload'></img> : null}
-        </ion-content>
+            {this.imageSrc ? <img src={this.imageSrc} alt='Image to upload'></img> : null}
+          </ion-content>
 
-      </ion-page>
+        </ion-page>
     );
   }
 }

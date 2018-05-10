@@ -1,4 +1,4 @@
-import {Component, Prop, Element, Event, State, EventEmitter} from '@stencil/core';
+import {Component, Prop, Element, Event, EventEmitter} from '@stencil/core';
 import {AlertController, ToastController} from '@ionic/core';
 
 import {ListingCard} from '../../global/interfaces';
@@ -12,12 +12,12 @@ import { ActiveRouter } from '@stencil/router';
 
 export class ListingItem {
 
-    @State() gateway: string = 'https://gateway.ob1.io/';
 
     @Prop() listing: ListingCard;
     @Prop() fave: Boolean = false;
-    @Prop({connect: 'ion-toast-controller'}) toastCtrl: ToastController;
-    @Prop({connect: 'ion-alert-controller'}) alertCtrl: AlertController;
+    @Prop({ context: 'gateway' }) private gateway: string;
+    @Prop({ connect: 'ion-toast-controller'}) toastCtrl: ToastController;
+    @Prop({ connect: 'ion-alert-controller'}) alertCtrl: AlertController;
     @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
 
     @Element() el: HTMLElement;

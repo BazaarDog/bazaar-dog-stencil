@@ -41,7 +41,7 @@ export class PopoverPage {
     this.closePopover.emit();
     await firebase.auth().signOut();
     // this.history.replace('/', {});
-    document.querySelector('ion-nav').setRoot('auth-page');
+    document.querySelector('ion-nav').setRoot('splash-page');
   }
 
   render() {

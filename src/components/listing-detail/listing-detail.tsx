@@ -16,9 +16,12 @@ export class ListingDetail {
     @State() listing: ListingFull;
     @State() vendor: Profile;
     @State() ratingHashes: Array<string>;
-    @State() gateway: string = 'https://gateway.ob1.io/';
 
     // @Prop() match: MatchResults;
+
+    @Prop({ context: 'IPNS_gateway' }) private ipns_gateway: string;
+    @Prop({ context: 'gateway' }) private gateway: string;
+
     @Prop({connect: 'ion-toast-controller'}) toastCtrl: ToastController;
     @Prop() slug: string;
     @Prop() peerId: string;
@@ -33,7 +36,7 @@ export class ListingDetail {
 
     async setUpVendor() {
         try {
-            this.vendor = await getProfile(this.gateway, this.peerId);
+            this.vendor = await getProfile(this.ipns_gateway, this.peerId);
         }
         catch (err) {
             this.showErrorToast();
@@ -43,7 +46,7 @@ export class ListingDetail {
 
     async setUpListing() {
         try {
-            let ListingFile = await getListingDetail(this.gateway, this.peerId, this.slug);
+            let ListingFile = await getListingDetail(this.ipns_gateway, this.peerId, this.slug);
             this.listing = ListingFile.listing;
         }
         catch (err) {
@@ -55,7 +58,7 @@ export class ListingDetail {
 
     async setUpRatings() {
         try {
-            this.ratingHashes = await getRatingHashes(this.gateway, this.peerId, this.slug);
+            this.ratingHashes = await getRatingHashes(this.ipns_gateway, this.peerId, this.slug);
         }
         catch (err) {
             this.showErrorToast();

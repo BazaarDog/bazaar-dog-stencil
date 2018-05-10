@@ -112,11 +112,16 @@ const getListingDetail = greenlet(
 );
 
 const doSearch = greenlet(
-    function (serviceUrl: string, params: Object, cors: boolean) {
+    function (serviceUrl: string, params: Object, cors: boolean, language: string) {
 
         var serviceUrl = serviceUrl === undefined ? '' : serviceUrl;
         var params = params === undefined ? {} : params;
         var cors = cors === undefined ? true : cors;
+
+
+        let headers =  new Headers({
+            "Accept-Language": language,
+        });
 
         let url = ``;
         // override cors of search provider with proxy
@@ -131,7 +136,7 @@ const doSearch = greenlet(
                 return a
             }, []).join('&');
 
-        return fetch(url).then((res) => {
+        return fetch(url,{headers:headers}).then((res) => {
             return res.json()
         }).then((data) => {
             return data;

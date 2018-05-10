@@ -1,5 +1,5 @@
 import {Component, Prop, State, Listen } from '@stencil/core';
-import {PopoverController, Popover} from '@ionic/core';
+import {PopoverController} from '@ionic/core';
 
 import {checkAnon} from '../../global/utils';
 
@@ -11,7 +11,7 @@ import {checkAnon} from '../../global/utils';
 })
 export class ProfileHeader {
 
-    popover: Popover;
+    popover: HTMLIonPopoverElement;
 
     @State() profilePic: string;
 
@@ -19,14 +19,14 @@ export class ProfileHeader {
 
     componentDidLoad() {
         this.profilePic = '/assets/img/defaultAvatar.png';
-
-        console.log(checkAnon());
     }
 
     @Listen('body:closePopover')
     closePopover() {
         this.popover.dismiss();
     }
+
+
 
     async openPopover(event) {
         console.log(event);

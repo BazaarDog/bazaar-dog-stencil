@@ -67,7 +67,7 @@ export class ProfilePage {
     try {
       // await firebase.auth().signOut();
       // this.history.replace('/', {});
-      document.querySelector('ion-nav').setRoot('auth-page');
+      document.querySelector('ion-nav').setRoot('splash-page');
     } catch (e) {
       this.showErrorToast();
     }
@@ -132,8 +132,6 @@ export class ProfilePage {
           <div id='imageBlock'>
             <img src='/assets/img/defaultAvatar.png'></img>
           </div>
-
-
           <div id='noSwProfileButtonBlock'>
             <ion-button onClick={() => this.logout()} id='logoutButton' expand='block' color='danger'>Logout</ion-button>
           </div>

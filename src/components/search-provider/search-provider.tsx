@@ -62,8 +62,6 @@ export class SearchWidget {
                                 )
                             }
                         </xui-dropdown>
-
-
             );
         }else{
             return(<div>

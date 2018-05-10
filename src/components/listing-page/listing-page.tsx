@@ -56,35 +56,37 @@ export class ListingPage {
     @State() storedSearchProvider: SearchProvider;
     @State() searchProviders: Array<SearchProvider>;
 
-
-    @Prop({connect: 'ion-toast-controller'}) toastCtrl: ToastController;
+    @Prop({ context: 'isServer' }) private isServer: boolean;
+    @Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
     @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
 
     @Element() el: Element;
 
     async componentDidLoad() {
-        console.log("component did load");
-        await this.setUpProviders();
+        if (!this.isServer) {
+            await this.setUpProviders();
 
-        this.pagination = {
-            'p': 0,
-            'total': 0,
-            'ps': 48,
-            'more': false
+            this.pagination = {
+                'p': 0,
+                'total': 0,
+                'ps': 48,
+                'more': false
+            }
+            this.param = {
+                'q': "*",
+                'p': 0,
+                'ps': 48,
+            };
+
+            await this.setUpListings();
+            this.isLeftSidebarIn = false;
+            this.toggleLeftSidebar(false);
         }
-        this.param = {
-            'q':"*",
-            'p': 0,
-            'ps': 48,
-        };
-
-        await this.setUpListings();
-        this.isLeftSidebarIn = false;
-        this.toggleLeftSidebar(false);
     }
 
     async setUpProviders() {
-        console.log("searchProvider Setup started");
+
+
         try {
             console.log("Loading Search Providers");
             this.searchProviders = await this.searchProviderService.getSearchProviders();
@@ -101,7 +103,7 @@ export class ListingPage {
     }
 
     async setUpListings() {
-        console.log("Listing Fetch Started");
+
         if (this.storedSearchProvider === undefined) {
             this.storedSearchProvider = {
                 "id": "bazaardog",
@@ -120,7 +122,8 @@ export class ListingPage {
             const data = await doSearch(
                 this.storedSearchProvider.listings,
                 this.param,
-                !this.storedSearchProvider.cors
+                !this.storedSearchProvider.cors,
+                navigator.language
             );
             this.options = data.options;
             var tmpResults = data.results;
@@ -135,12 +138,12 @@ export class ListingPage {
 
         iScroll.addEventListener('ionInfinite', async () => {
             this.param['p'] = this.param['p'] + 1;
-            console.log('iScroll Event Triggered');
             try {
                 const data = await doSearch(
                     this.storedSearchProvider.listings,
                     this.param,
-                    !this.storedSearchProvider.cors
+                    !this.storedSearchProvider.cors,
+                    navigator.language
                 );
                 this.listings = this.listings.concat(data.results.results);
                 iScroll.complete();
@@ -150,7 +153,7 @@ export class ListingPage {
                 this.showErrorToast();
             }
         });
-        console.log("setup complete");
+
 
     }
 
@@ -169,8 +172,9 @@ export class ListingPage {
 
     @Listen('ionInput')
     search(ev) {
-        //console.log(JSON.stringify(event.target.value));
+
         setTimeout(async () => {
+            this.listings = [];
             if (ev.target.value.length > 0) {
                 try {
                     this.param['q'] = ev.target.value;
@@ -178,16 +182,20 @@ export class ListingPage {
                     const data = await doSearch(
                         this.storedSearchProvider.listings,
                         this.param,
-                        !this.storedSearchProvider.cors
+                        !this.storedSearchProvider.cors,
+                        navigator.language
                     );
                     this.options = data.options;
-
                     this.listings = data.results.results;
                     this.setPagination(data.results);
 
                 }
                 catch (err) {
-                    const data = await doSearch(this.storedSearchProvider.listings, {}, !this.storedSearchProvider.cors);
+                    const data = await doSearch(this.storedSearchProvider.listings,
+                        {},
+                        !this.storedSearchProvider.cors,
+                        navigator.language
+                    );
                     this.options = data.options;
                     this.listings = data.results.results;
                     this.setPagination(data.results);
@@ -196,7 +204,12 @@ export class ListingPage {
             } else {
                 this.param['q'] = "*";
                 this.param['p'] = 0;
-                const data = await doSearch(this.storedSearchProvider.listings, this.param, !this.storedSearchProvider.cors);
+                const data = await doSearch(
+                    this.storedSearchProvider.listings,
+                    this.param,
+                    !this.storedSearchProvider.cors,
+                    navigator.language
+                );
                 this.options = data.options;
                 this.listings = data.results.results;
                 this.setPagination(data.results);
@@ -205,21 +218,6 @@ export class ListingPage {
         }, 500);
     }
 
-    takePicture() {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.name = 'image';
-        input.accept = 'image/*';
-        input.setAttribute('capture', 'camera');
-
-        input.click();
-
-        input.addEventListener('change', (ev: any) => {
-            console.log('changed');
-            console.log(ev.target.files);
-
-        })
-    }
 
 
     navigateToProfile(peerId: string) {
@@ -246,7 +244,6 @@ export class ListingPage {
             this.makeContentOffset();
         }
         this.isLeftSidebarIn = !this.isLeftSidebarIn
-        console.log(window.innerWidth + ' ' + this.isLeftSidebarIn);
     }
 
     makeContentFullWidth() {
@@ -296,12 +293,22 @@ export class ListingPage {
         this.param[event.detail.param] = event.detail.value;
         setTimeout(async () => {
             try {
-                const data = await doSearch(this.storedSearchProvider.listings, this.param, !this.storedSearchProvider.cors);
+                const data = await doSearch(
+                    this.storedSearchProvider.listings,
+                    this.param,
+                    !this.storedSearchProvider.cors,
+                    navigator.language
+                );
                 this.listings = data.results.results;
                 this.setPagination(data.results);
             }
             catch (err) {
-                const data = await doSearch(this.storedSearchProvider.listings, {}, !this.storedSearchProvider.cors);
+                const data = await doSearch(
+                    this.storedSearchProvider.listings,
+                    {},
+                    !this.storedSearchProvider.cors,
+                    navigator.language
+                );
                 this.listings = data.results.results;
                 this.setPagination(data.results);
             }

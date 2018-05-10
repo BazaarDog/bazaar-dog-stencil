@@ -1,12 +1,23 @@
-importScripts('workbox-v3.0.0-alpha.6/workbox-sw.js')
+importScripts('workbox-v3.1.0/workbox-sw.js')
 
 self.workbox.skipWaiting();
 self.workbox.clientsClaim();
 
-//const IPFS = require('ipfs');
-//const { createProxyServer } = require('ipfs-postmsg-proxy');
+importScripts('./assets/ipfs.config.js');
+importScripts('./assets/ipfs.min.js');
+importScripts('./assets/ipfs-postmsg-proxy.2.16.1.js');
 
-//let node;
+
+
+async function getJsonFromUrl() {
+  var query = location.search.substr(1);
+  var result = {};
+  query.split("&").forEach(function(part) {
+    var item = part.split("=");
+    result[item[0]] = decodeURIComponent(item[1]);
+  });
+  return result;
+}
 
 /*
   Routes
@@ -23,6 +34,7 @@ workbox.routing.registerRoute(
         ],
     }),
 );
+
 
 
 /*
@@ -42,41 +54,46 @@ self.addEventListener('push', (event) => {
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
-/*
+
 self.addEventListener('activate', (event) => {
     console.log('activate step');
-
-    const node = new IPFS({
-        config: {
-            Addresses: {
-                Swarm: []
-            }
-        }
-    });
-    node.on('ready', () => console.log('js-ipfs node is ready'));
-    node.on('error', (err) => console.log('js-ipfs node errored', err));
-
+    ipfsconfig.repo =   "BazaarDog-ipfs";
+    self.node = new Ipfs(ipfsconfig);
+    self.node.on('ready', () => console.log('node is ready...\n\n\n _               _        \n|_) _._  _. _.._| \\ _  _  \n|_)(_|/_(_|(_|| |_/(_)(_| \n                       _| \nusing awesome js-ipfs\n'));
+    self.node.on('error', (err) => console.log('js-ipfs node errored\n\n\n####### ######  ######  ####### ######\n#       #     # #     # #     # #     #\n#       #     # #     # #     # #     #\n#####   ######  ######  #     # ######\n#       #   #   #   #   #     # #   #\n#       #    #  #    #  #     # #    #\n####### #     # #     # ####### #     #\n', err));
     event.waitUntil(self.clients.claim());
 });
+
 
 self.addEventListener('fetch', (event) => {
     if (!event.request.url.startsWith(self.location.origin + '/ipfs')) {
         return console.log('Fetch not in scope', event.request.url);
     }
 
-    console.log('Handling fetch event for', event.request.url);
+
 
     const multihash = event.request.url.split('/ipfs/')[1];
-    event.respondWith(catAndRespond(multihash));
+    if(self.node!==undefined) {
+        //console.log('Handling fetch event for', event.request.url);
+        event.respondWith(catAndRespond(multihash));
+    }else {
+        console.log('FALLBACK!!');
+        fetch("https://gateway.ob1.io/ipfs/"+ multihash).then(function(response) {
+console.log(response.content);
+            return response;
+            //const headers = { status: 200, statusText: 'OK', headers: {} };
+            //return new Response(response, headers);
+        });
+    }
 });
 
 async function catAndRespond (hash) {
-    const data = await node.files.cat(hash);
+    const data = await self.node.dag.get(hash);
     const headers = { status: 200, statusText: 'OK', headers: {} };
-    return new Response(data, headers)
+    return new Response(data.value, headers)
 }
 
-createProxyServer(() => node, {
+IpfsPostmsgProxy.createProxyServer(() => self.node, {
     addListener: self.addEventListener.bind(self),
     removeListener: self.removeEventListener.bind(self),
     async postMessage (data) {
@@ -85,5 +102,5 @@ createProxyServer(() => node, {
     clients.forEach(client => client.postMessage(data));
 }
 });
-*/
+
 self.workbox.precaching.precacheAndRoute([]);

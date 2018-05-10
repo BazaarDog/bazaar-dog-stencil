@@ -7,7 +7,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "stencil build --prerender --stats",
+    "buildNoPR": "stencil build  --stats",
+    "build": "stencil build  --prerender --stats",
     "dev": "sd concurrent \"stencil build --dev --stats --watch\" \"stencil-dev-server\" ",
     "devWithSW": "sd concurrent \"stencil build --dev --service-worker --watch\" \"stencil-dev-server\" ",
     "functionDev": "stencil build --dev --watch",
@@ -16,12 +17,13 @@
     "deploy": "npm run build"
   },
   "dependencies": {
-    "@ionic/core": "0.1.4",
-    "@stencil/core": "^0.7.7",
-    "@stencil/router": "0.0.25",
+    "@ionic/core": "0.2.2",
+    "@stencil/core": "^0.7.24",
+    "@stencil/router": "0.1.3",
     "am-rating": "0.0.7",
     "baguettebox.js": "^1.10.0",
     "greenlet": "^0.1.2",
+    "intersection-observer": "~0.5.0",
     "localforage": "1.7.0",
     "localforage-cordovasqlitedriver": "^1.7.0",
     "st-img": "^0.3.0"
@@ -29,13 +31,14 @@
   "devDependencies": {
     "@stencil/dev-server": "latest",
     "@stencil/sass": "0.0.2",
-    "@stencil/utils": "latest"
+    "@stencil/utils": "latest",
+    "webpack": "^4.6.0"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ionic-team/stencil-starter.git"
   },
-  "author": "Ionic Team",
+  "author": "Bazaar Dog",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ionic-team/stencil"

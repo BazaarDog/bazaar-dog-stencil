@@ -1,2 +1,37 @@
+lighthouse
+- [ ] make inital landing page.
+- [ ] remove unused css
+- [ ] reduce DOM elements
+
+routing
+- [ ] test External Routing issues
+- [ ] providerQ param in search
+
+storage
+- [ ] generation from seed phrase
+- [ ] set up IPFS
+- [ ] integrate ping tests
+
+listing-page
+- [ ] page size
+- [ ] sortBy dropdown
+- [ ] results count
+- [ ] display param
+- [ ] fix search databinding
+
+Infrastructure
+- [x] mock gw
+- [ ] node gw
+- [x] go gw
+
+settings menu
+- [ ] gateways
+- [ ] searchProviders
+- [ ] defaultCurrency
+- [ ] get/set seed
+
+features
+- [ ] saveSearch
+- [ ] favorites
 
 

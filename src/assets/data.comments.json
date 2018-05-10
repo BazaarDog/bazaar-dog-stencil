@@ -1,0 +1,32 @@
+/*,
+    {
+      "id": "blockbooth",
+      "name": "Block Booth",
+      "logo": "/assets/img/searchProviders/blockboothLogo.png",
+      "listings": "https://search.blockbooth.com/api/",
+      "reports": "",
+      "torlistings": "http://vnjzhvm5gkctyldn.onion/api/",
+      "enabled": true,
+      "cors": false
+    },
+
+    {
+      "id": "otb",
+      "name": "OnTheBlockchain",
+      "logo": "/assets/img/searchProviders/OBotbLogo.png",
+      "listings": "https://openbazaar.ontheblockchain.com/ob2search/listings",
+      "reports": "https://openbazaar.ontheblockchain.com/ob2reportsListings.php",
+      "torlistings": "",
+      "enabled": true,
+      "cors": false
+    },
+    {
+      "id": "rawflood",
+      "name": "Raw Flood",
+      "logo": "/assets/img/searchProviders/rawFloodLogo.png",
+      "listings": "https://search.rawflood.com/ob/search/listings",
+      "reports": "",
+      "torlistings": "",
+      "enabled": false,
+      "cors": false
+    }*/

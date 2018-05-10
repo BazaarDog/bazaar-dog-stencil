@@ -18,6 +18,7 @@ exports.config = {
         }
     ],
     globalStyle: 'src/global/variables.css',
+    globalScript: 'src/global/gateways.ts',
     plugins: [
         sass()
     ]

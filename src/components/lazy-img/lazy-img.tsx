@@ -1,5 +1,6 @@
 import {Component, Element, Event, EventEmitter, Prop, State} from '@stencil/core';
 
+
 /*
   You can use this component to lazy load below the fold images to improve load time.
   Below the fold images are images that are not seen by the user until they have started to scroll.
@@ -19,6 +20,7 @@ export class LazyImg {
 
   @Prop() src: string;
   @Prop() alt: string;
+  @Prop({ context: 'isServer' }) private isServer: boolean;
 
   @State() oldSrc: string;
 
@@ -31,9 +33,10 @@ export class LazyImg {
   }
 
   componentWillUpdate() {
-    //console.log('componentWillUpdate called', this.src, this.oldSrc);
-    if (this.src !== this.el.querySelector('img').getAttribute('data-src')) {
-      this.addIntersectionObserver();
+    if (!this.isServer) {
+      if (this.src !== this.el.querySelector('img').getAttribute('data-src')) {
+        this.addIntersectionObserver();
+      }
     }
   }
 

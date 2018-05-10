@@ -12,7 +12,8 @@ import {getRating} from '../../global/http-service';
 
 export class RatingItem {
 
-    @State() gateway: string = 'https://gateway.ob1.io/';
+
+    @Prop({ context: 'IPFS_gateway' }) private ipfs_gateway: string;
 
     @Prop() ratingHash: string;
     @State() rating: RatingDetail;
@@ -31,7 +32,7 @@ export class RatingItem {
 
     async setUpRating() {
         try {
-            this.rating = await getRating(this.gateway, this.ratingHash);
+            this.rating = await getRating(this.ipfs_gateway, this.ratingHash);
         }
         catch (err) {
             this.showErrorToast();

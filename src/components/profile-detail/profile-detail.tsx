@@ -1,5 +1,5 @@
 import {Component, Prop, State} from '@stencil/core';
-import {LoadingController, Loading} from '@ionic/core';
+import {LoadingController} from '@ionic/core';
 import {Profile, Listing, Follower} from '../../global/interfaces';
 import {
     getProfile,
@@ -17,14 +17,16 @@ import {ToastController} from '@ionic/core';
 export class ProfileDetail {
 
     // @Prop() match: any;
-    @Prop({connect: 'ion-loading-controller'}) loadingCtrl: LoadingController;
 
-    @State() gateway: string = 'https://gateway.ob1.io/';
+    @Prop({ context: 'IPNS_gateway' }) private ipns_gateway: string;
+    @Prop({ context: 'gateway' }) private gateway: string;
+
 
     @State() detailRequest: any;
 
     @Prop() peerId: string;
-    @Prop({connect: 'ion-toast-controller'}) toastCtrl: ToastController;
+    @Prop({ connect: 'ion-loading-controller' }) loadingCtrl: LoadingController;
+    @Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
 
     @State() profile: Profile;
     @State() listings: Array<Listing>;
@@ -33,9 +35,7 @@ export class ProfileDetail {
     @State() followers: Array<Follower>;
     @State() following: Array<string>;
 
-
-    loading: Loading;
-
+    loading: HTMLIonLoadingElement;
 
     async componentDidLoad() {
         this.loading = await this.loadingCtrl.create({
@@ -43,9 +43,9 @@ export class ProfileDetail {
         });
         try {
             this.loading.present();
-            this.profile = await getProfile(this.gateway, this.peerId);
-            this.listings = await getListings(this.gateway, this.peerId);
-            this.ratingHashes = await getRatingHashes(this.gateway, this.peerId);
+            this.profile = await getProfile(this.ipns_gateway, this.peerId);
+            this.listings = await getListings(this.ipns_gateway, this.peerId);
+            this.ratingHashes = await getRatingHashes(this.ipns_gateway, this.peerId);
             //this.followers = await getFollowers(this.gateway, this.peerId);
             //this.following = await getFollowing(this.gateway, this.peerId);
             this.loading.dismiss();

@@ -16,7 +16,7 @@ export class BazaarDogStencil {
 
                     {checkAnon() ? <ion-route-redirect from='/favorites' to='/home'></ion-route-redirect> : null}
 
-                    <ion-route url='/auth' component='auth-page'></ion-route>
+                    <ion-route url='/splash' component='splash-page'></ion-route>
                     <ion-route url='/' component='tabs-page'>
                         <ion-route component='listing-tab'>
                             <ion-route url='' component='listing-page'/>

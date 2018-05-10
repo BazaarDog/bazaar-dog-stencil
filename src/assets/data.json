@@ -7,16 +7,16 @@
       "url": "/"
     },
     {
-      "id": "ob1",
-      "name": "OB1",
-      "enabled": true,
-      "url": "https://gateway.ob1.io/"
-    },
-    {
       "id": "mock",
       "name": "Bazaar Dog (mock)",
       "enabled": true,
       "url": "https://alpha.bazaar.dog/"
+    },
+    {
+      "id": "ob1",
+      "name": "OB1",
+      "enabled": true,
+      "url": "https://gateway.ob1.io/"
     },
     {
       "id": "go",
@@ -53,35 +53,14 @@
       "cors": true
     },
     {
-      "id": "blockbooth",
-      "name": "Block Booth",
-      "logo": "/assets/img/searchProviders/blockboothLogo.png",
-      "listings": "https://search.blockbooth.com/api/",
-      "reports": "",
-      "torlistings": "http://vnjzhvm5gkctyldn.onion/api/",
+      "id": "local",
+      "name": "Offline",
+      "logo": "/assets/img/searchProviders/bazaarDogOffline.png",
+      "listings": "/search/",
+      "reports": "/reports/",
+      "torlistings": "/search/",
       "enabled": true,
-      "cors": false
-    },
-
-    {
-      "id": "otb",
-      "name": "OnTheBlockchain",
-      "logo": "/assets/img/searchProviders/OBotbLogo.png",
-      "listings": "https://openbazaar.ontheblockchain.com/ob2search/listings",
-      "reports": "https://openbazaar.ontheblockchain.com/ob2reportsListings.php",
-      "torlistings": "",
-      "enabled": true,
-      "cors": false
-    },
-    {
-      "id": "rawflood",
-      "name": "Raw Flood",
-      "logo": "/assets/img/searchProviders/rawFloodLogo.png",
-      "listings": "https://search.rawflood.com/ob/search/listings",
-      "reports": "",
-      "torlistings": "",
-      "enabled": false,
-      "cors": false
+      "cors": true
     }
   ]
 }

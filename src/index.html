@@ -56,6 +56,42 @@
         storeName: 'BazaarDogStore', // Should be alphanumeric, with underscores.
         description: 'Private Data for the Bazaar Dog Client'
     });
+
+
+    const initUA = navigator.userAgent;
+    function setUserAgent(window, userAgent) {
+        // Works on Firefox, Chrome, Opera and IE9+
+        if (navigator.__defineGetter__) {
+            navigator.__defineGetter__('userAgent', function () {
+                return userAgent;
+            });
+        } else if (Object.defineProperty) {
+            Object.defineProperty(navigator, 'userAgent', {
+                get: function () {
+                    return userAgent;
+                }
+            });
+        }
+        // Works on Safari
+        if (window.navigator.userAgent !== userAgent) {
+            var userAgentProp = {
+                get: function () {
+                    return userAgent;
+                }
+            };
+            try {
+                Object.defineProperty(window.navigator, 'userAgent', userAgentProp);
+            } catch (e) {
+                window.navigator = Object.create(navigator, {
+                    userAgent: userAgentProp
+                });
+            }
+        }
+    }
+    setUserAgent(window,"BazaarDogStencil-OpenBazaar/0.0.1" );
+    Object.defineProperty(navigator, 'userAgent', {
+            get: function () { return initUA + "BazaarDogStencil-OpenBazaar/0.0.1"; }
+    });
 </script>
 </body>
 
