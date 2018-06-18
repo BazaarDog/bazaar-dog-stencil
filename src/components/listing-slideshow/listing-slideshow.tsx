@@ -10,7 +10,9 @@ export class ListingSlideshow {
 
     @Element() el: HTMLElement;
     @State() gallery: Array<any>;
-    @State() gateway: string = 'https://gateway.ob1.io/';
+
+    @Prop({ context: 'IPFS_gateway' }) private ipfs_gateway: string;
+    @Prop({ context: 'gateway' }) private gateway: string;
     @Prop() images: Array<Thumbnails>;
 
     render() {
@@ -23,9 +25,9 @@ export class ListingSlideshow {
                                 return (
                                     <ion-col col-12>
                                         <a data-fancybox="gallery"
-                                           href={ img ? this.gateway + `ipfs/` + img.large : '/assets/img/defaultItem.png'}>
+                                           href={ img ? this.ipfs_gateway + `ipfs/` + img.large : '/assets/img/defaultItem.png'}>
                                             <img
-                                                src={ img ? this.gateway + `ipfs/` + img.large : '/assets/img/defaultItem.png'}
+                                                src={ img ? this.ipfs_gateway + `ipfs/` + img.large : '/assets/img/defaultItem.png'}
                                             />
                                         </a>
                                     </ion-col>
@@ -39,7 +41,7 @@ export class ListingSlideshow {
                                 return (
                                     <ion-col col-4>
                                         <a data-fancybox="gallery" class="tiny"
-                                           href={ img ? this.gateway + `ipfs/` + img.large : '/assets/img/defaultItem.png'}>
+                                           href={ img ? this.ipfs_gateway + `ipfs/` + img.large : '/assets/img/defaultItem.png'}>
                                             <img
                                                 src={ img ? this.gateway + `ipfs/` + img.tiny : '/assets/img/defaultItem.png'}
                                             />

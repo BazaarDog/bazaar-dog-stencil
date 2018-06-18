@@ -1,6 +1,7 @@
 import greenlet from 'greenlet';
 import {Rating} from "./interfaces";
 
+
 const getProfile = greenlet(
     function (gateway: string, peerID: string) {
         const url = gateway + `ipns/${peerID}/profile.json`;
@@ -112,9 +113,10 @@ const getListingDetail = greenlet(
 );
 
 const doSearch = greenlet(
+
     function (serviceUrl: string, params: Object, cors: boolean, language: string) {
 
-        var serviceUrl = serviceUrl === undefined ? '' : serviceUrl;
+        var serviceUrl :string = serviceUrl === undefined ? '' : serviceUrl;
         var params = params === undefined ? {} : params;
         var cors = cors === undefined ? true : cors;
 

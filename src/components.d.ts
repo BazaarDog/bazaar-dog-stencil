@@ -41,8 +41,10 @@ import {
   Thumbnails,
 } from './global/interfaces';
 import {
+  Map as Map2,
   SearchOptionInterface,
   SearchProvider,
+  SortByItems,
 } from './global/interfaces-app';
 
 declare global {
@@ -1122,6 +1124,45 @@ declare global {
   namespace JSXElements {
     export interface ShareButtonAttributes extends HTMLAttributes {
       'listing'?: any;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface SortByDropdown {
+      'init': any;
+      'onSortByActivated': (event: any) => void;
+      'options': Map<SortByItems>;
+      'param': string;
+    }
+  }
+
+  interface HTMLSortByDropdownElement extends StencilComponents.SortByDropdown, HTMLStencilElement {}
+
+  var HTMLSortByDropdownElement: {
+    prototype: HTMLSortByDropdownElement;
+    new (): HTMLSortByDropdownElement;
+  };
+  interface HTMLElementTagNameMap {
+    'sort-by-dropdown': HTMLSortByDropdownElement;
+  }
+  interface ElementTagNameMap {
+    'sort-by-dropdown': HTMLSortByDropdownElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'sort-by-dropdown': JSXElements.SortByDropdownAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface SortByDropdownAttributes extends HTMLAttributes {
+      'init'?: any;
+      'onOnSearchParamChange'?: (event: CustomEvent<{ param: string; value: any }>) => void;
+      'options'?: Map<SortByItems>;
+      'param'?: string;
     }
   }
 }

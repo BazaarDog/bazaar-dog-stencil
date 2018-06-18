@@ -1,12 +1,11 @@
 import {Component, Element, State, Prop, Listen} from '@stencil/core';
 import {ToastController} from '@ionic/core';
-import { ActiveRouter } from '@stencil/router';
+import {ActiveRouter} from '@stencil/router';
 
 
 import {
     Map,
     ListingCard,
-
 } from '../../global/interfaces';
 
 import{
@@ -19,6 +18,8 @@ import{
 import {doSearch} from '../../global/http-service';
 
 import SearchProviderService from '../../services/searchStorage';
+import OfflineSearchService from '../../services/offlineSearch';
+
 //import {unescape} from "querystring";
 
 @Component({
@@ -29,16 +30,12 @@ export class ListingPage {
 
     private searchProviderService: SearchProviderService = new SearchProviderService();
 
+    private offlineSearch: OfflineSearchService = new OfflineSearchService();
+
+
     page: number = 0;
 
-    styles: Array<any> = [
-        {name: 'books',},
-        {name: 'clothing',},
-        {name: 'electronics',},
-        {name: 'food',},
-        {name: 'games',},
-        {name: 'health',}
-    ];
+
 
     elements = [
         'search-menu',
@@ -56,9 +53,9 @@ export class ListingPage {
     @State() storedSearchProvider: SearchProvider;
     @State() searchProviders: Array<SearchProvider>;
 
-    @Prop({ context: 'isServer' }) private isServer: boolean;
-    @Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
-    @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
+    @Prop({context: 'isServer'}) private isServer: boolean;
+    @Prop({connect: 'ion-toast-controller'}) toastCtrl: ToastController;
+    @Prop({context: 'activeRouter'}) activeRouter: ActiveRouter;
 
     @Element() el: Element;
 
@@ -76,6 +73,7 @@ export class ListingPage {
                 'q': "*",
                 'p': 0,
                 'ps': 48,
+                'sortBy': '',
             };
 
             await this.setUpListings();
@@ -94,11 +92,35 @@ export class ListingPage {
             this.storedSearchProvider = await this.searchProviderService.getSavedProvider();
         }
         catch (err) {
-            console.log(err);
+            this.searchProviders = [
+                {
+                    "id": "local",
+                    "name": "Offline Cache",
+                    "logo": "/assets/img/searchProviders/bazaarDogOffline.png",
+                    "listings": "/search/",
+                    "reports": "/reports/",
+                    "torlistings": "/search/",
+                    "enabled": true,
+                    "cors": true
+                }
+            ];
+            console.log("Error loading search providers" + err);
             this.showErrorToast();
         }
 
-        if(this.storedSearchProvider==null){
+        if (this.storedSearchProvider == null) {
+        }
+    }
+    async handleSearch(serviceUrl:string, param:any, cors:boolean, language: string ){
+        if(serviceUrl==='/search/'){
+            return await this.offlineSearch.search(param);
+        } else{
+            return await doSearch(
+                serviceUrl,
+                param,
+                cors,
+                language
+            );
         }
     }
 
@@ -115,17 +137,19 @@ export class ListingPage {
                 "enabled": true,
                 "cors": true
             }
+
         }
 
         try {
             // set up with first bit of content
-            const data = await doSearch(
+            const data = await this.handleSearch(
                 this.storedSearchProvider.listings,
                 this.param,
                 !this.storedSearchProvider.cors,
                 navigator.language
             );
             this.options = data.options;
+            this.sortBy = data.sortBy;
             var tmpResults = data.results;
             this.listings = tmpResults.results;
             this.setPagination(data.results);
@@ -139,7 +163,7 @@ export class ListingPage {
         iScroll.addEventListener('ionInfinite', async () => {
             this.param['p'] = this.param['p'] + 1;
             try {
-                const data = await doSearch(
+                const data = await this.handleSearch(
                     this.storedSearchProvider.listings,
                     this.param,
                     !this.storedSearchProvider.cors,
@@ -172,52 +196,52 @@ export class ListingPage {
 
     @Listen('ionInput')
     search(ev) {
-
+        this.listings = [];
         setTimeout(async () => {
-            this.listings = [];
             if (ev.target.value.length > 0) {
                 try {
                     this.param['q'] = ev.target.value;
                     this.param['p'] = 0;
-                    const data = await doSearch(
+                    const data = await this.handleSearch(
                         this.storedSearchProvider.listings,
                         this.param,
                         !this.storedSearchProvider.cors,
                         navigator.language
                     );
                     this.options = data.options;
+                    this.sortBy = data.sortBy;
                     this.listings = data.results.results;
                     this.setPagination(data.results);
-
                 }
                 catch (err) {
-                    const data = await doSearch(this.storedSearchProvider.listings,
+                    const data = await this.handleSearch(this.storedSearchProvider.listings,
                         {},
                         !this.storedSearchProvider.cors,
                         navigator.language
                     );
                     this.options = data.options;
+                    this.sortBy = data.sortBy;
                     this.listings = data.results.results;
                     this.setPagination(data.results);
 
                 }
             } else {
-                this.param['q'] = "*";
+                this.param['q'] = "Qm";
                 this.param['p'] = 0;
-                const data = await doSearch(
+                const data = await this.handleSearch(
                     this.storedSearchProvider.listings,
                     this.param,
                     !this.storedSearchProvider.cors,
                     navigator.language
                 );
                 this.options = data.options;
+                this.sortBy = data.sortBy;
                 this.listings = data.results.results;
                 this.setPagination(data.results);
 
             }
         }, 500);
     }
-
 
 
     navigateToProfile(peerId: string) {
@@ -256,10 +280,10 @@ export class ListingPage {
         document.getElementById("content-area").classList.remove('content-flush-left');
     }
 
-    scrollToTop(){
+    scrollToTop() {
         document.getElementById("listing-topbar").scrollIntoView();
 
-       console.log("scroll");
+        console.log("scroll");
         window.requestAnimationFrame(() => {
             window.scrollTo(0, 0);
         })
@@ -273,16 +297,20 @@ export class ListingPage {
         this.listings = [];
         this.scrollToTop();
         this.options = {};
+        this.sortBy = {};
+
         this.storedSearchProvider = this.searchProviders.filter(function (obj) {
             return obj.id == event.detail;
         })[0];
 
 
         this.searchProviderService.setSavedProvider(this.storedSearchProvider);
-        this.param = {'q':this.param['q'], 'p':0};
+        this.param = {'q': this.param['q'], 'p': 0};
         this.options = {};
+        this.sortBy = {};
         this.setUpListings();
     }
+
 
     @Listen('onSearchParamChange')
     update(event) {
@@ -293,7 +321,7 @@ export class ListingPage {
         this.param[event.detail.param] = event.detail.value;
         setTimeout(async () => {
             try {
-                const data = await doSearch(
+                const data = await this.handleSearch(
                     this.storedSearchProvider.listings,
                     this.param,
                     !this.storedSearchProvider.cors,
@@ -303,7 +331,7 @@ export class ListingPage {
                 this.setPagination(data.results);
             }
             catch (err) {
-                const data = await doSearch(
+                const data = await this.handleSearch(
                     this.storedSearchProvider.listings,
                     {},
                     !this.storedSearchProvider.cors,
@@ -324,7 +352,7 @@ export class ListingPage {
 
                 <ion-fab id="search-menu-fab" edge={true} horizontal='right' vertical='top'>
                     <ion-fab-button onClick={() => this.toggleLeftSidebar(true)} color='secondary'
-                                 ion-fab>
+                                    ion-fab>
                         <ion-icon name='options'></ion-icon>
                     </ion-fab-button>
                 </ion-fab>
@@ -334,7 +362,7 @@ export class ListingPage {
                 </ion-toolbar>
 
 
-                <ion-content class="card-background-page" >
+                <ion-content class="card-background-page">
                     <div>
                         <div id="search-menu" class="search-menu">
                             <br/><br/>
@@ -346,9 +374,22 @@ export class ListingPage {
                             <search-menu options={this.options}></search-menu>
                             <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                         </div>
-                        <div id="content-area" >
-                            <div id="listing-topbar"></div>
-                            <listing-list fave={false} listings={this.listings} ></listing-list>
+                        <div id="content-area">
+                            <ion-grid id="listing-topbar">
+                                <ion-row>
+                                    <ion-col>
+                                        <sort-by-dropdown
+                                            init={this.param ? this.param['sortBy'] : ''}
+                                            options={this.sortBy}></sort-by-dropdown>
+                                    </ion-col>
+                                    <ion-col></ion-col>
+                                    <ion-col></ion-col>
+                                    <ion-col></ion-col>
+                                    <ion-col>Results: { this.pagination ? this.pagination.total : 0 }</ion-col>
+
+                                </ion-row>
+                            </ion-grid>
+                            <listing-list fave={false} listings={this.listings}></listing-list>
                             <ion-infinite-scroll id="infinite-scroll">
                                 <ion-infinite-scroll-content
                                     loadingSpinner="bubbles"
@@ -359,9 +400,9 @@ export class ListingPage {
                     </div>
                 </ion-content>
                 <ion-fab vertical='bottom' horizontal='right'>
-                        <ion-fab-button onClick={() => this.scrollToTop()} color='primary' >
-                            <ion-icon name='arrow-up'></ion-icon>
-                        </ion-fab-button>
+                    <ion-fab-button onClick={() => this.scrollToTop()} color='primary'>
+                        <ion-icon name='arrow-up'></ion-icon>
+                    </ion-fab-button>
                 </ion-fab>
             </ion-page>
         );

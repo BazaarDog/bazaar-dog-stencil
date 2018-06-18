@@ -30,15 +30,12 @@ export class ListingItem {
 
     }
 
-
     removeIntersectionObserver() {
         if (this.io) {
             this.io.disconnect();
             this.io = null;
         }
     }
-
-
 
     async save(listing: ListingCard) {
         console.log('here');
@@ -121,25 +118,24 @@ export class ListingItem {
                             <ion-button color='primary'
                                         onClick={() => this.navigateToDetail(this.listing.relationships.vendor.data.peerID, this.listing.data.slug)}
                                         fill='clear' icon-only>
-                                {this.listing.data.averageRating.toPrecision(2)}
-                                <ion-icon name='star'>
-                                </ion-icon>
-                                ({this.listing.data.ratingCount})
+                                {this.listing.data.averageRating? this.listing.data.averageRating.toPrecision(2) +"⭐" : ''}
+
+                                {this.listing.data.ratingCount? "(" + this.listing.data.ratingCount+ ")" : ''}
                             </ion-button>
-                            {this.fave ?
-                                <ion-button color='danger' onClick={() => this.deleteListing(this.listing)} fill='clear'
-                                            icon-only>
-                                    <ion-icon name='trash'></ion-icon>
-                                </ion-button>
-                                :
-                                <ion-button color='primary' onClick={() => this.save(this.listing)} fill='clear'
-                                            icon-only>
-                                    <ion-icon name='bookmark'></ion-icon>
-                                </ion-button>
+                            {//this.fave ?
+                            //    <ion-button color='danger' onClick={() => this.deleteListing(this.listing)} fill='clear'
+                            //                icon-only>
+                            //        <ion-icon name='trash'></ion-icon>
+                            //    </ion-button>
+                            //    :
+                                //<ion-button color='primary' onClick={() => this.save(this.listing)} fill='clear'
+                                //            icon-only>
+                                //    <ion-icon name='bookmark'></ion-icon>
+                                //</ion-button>
                             }
 
                             <span
-                                class="priceLabel"> {this.listing.data.price.amount / 100} {this.listing.data.price.currencyCode}</span>
+                                class="priceLabel"> { this.listing.data.price.amount / 100 } <br/> { this.listing.data.price.currencyCode }</span>
                         </ion-buttons>
                             <div>
                             <p class="vendorName"> {this.listing.relationships.vendor.data.name}</p>

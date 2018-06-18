@@ -22,12 +22,11 @@
     <link rel='preload' href='/assets/localforage.js' as='script'>
 
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.css" media="none" onload="if(media!='all')media='all'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.css"></noscript>
+    <link rel="stylesheet" href="/assets/css/semantic.strip.min.css" media="none" onload="if(media!='all')media='all'">
+    <noscript><link rel="stylesheet" href="/assets/css/semantic.strip.min.css"></noscript>
 
     <link rel="stylesheet" href="/assets/css/jquery.fancybox.min.css" media="none" onload="if(media!='all')media='all'">
     <noscript><link rel="stylesheet" href="/assets/css/jquery.fancybox.min.css"></noscript>
-
 </head>
 
 <body>
@@ -38,7 +37,185 @@
         overflow: visible !important;
     }
 </style>
-<noscript>You must have JS enabled to use this app.</noscript>
+<noscript>
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+
+            font-family: 'Roboto', 'Noto', sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+
+        }
+
+        .wrapper {
+            height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            perspective: 2px;
+            background-color: #6f7b91;
+        }
+
+        .section {
+            position: relative;
+            height: 35vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .parallax::after {
+            content: " ";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+
+            transform: translateZ(-1px) scale(2.5);
+            background-size: 100%;
+            z-index: -1;
+        }
+
+        /* The styling for the static div. */
+        .static {
+            box-shadow: 60px 60px 35px 4px rgba(0, 0, 0, 0.15);
+            max-width: 700px;
+            padding: 15px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: whitesmoke;
+        }
+
+        .bg1 {
+            color: #ffffff;
+            text-shadow: 0 0 5px #000;
+        }
+
+        /* Sets the actual background images to adorable kitties. This part is crucial. */
+        .bg1::after {
+            background-image: url('https://www.bazaar.dog/background.png');
+            background-repeat: no-repeat;
+        }
+
+        .bg2::after {
+            background-image: url("https://www.bazaar.dog//bounty.gif");
+            background-repeat: no-repeat;
+        }
+    </style>
+
+
+    <main class="wrapper">
+        <section class="section parallax bg1">
+            <h1></h1>
+        </section>
+        <section class="static">
+            <h2>Welcome to Bazaar Dog, your scrappy Open Bazaar search provider</h2>
+            <p>This is an about page for an OpenBazaar 2 search provider. The search endpoint is a data API only, there is
+                no public webpage to browse listings, only json. If you try to browse the api outside of OpenBazaar you'll
+                be directed here.</p>
+            <hr>
+
+            <h3>How do I use Bazaar Dog?</h3>
+            <p>You can also use bazaar.dog to search for moderators and profiles. In <a target="_blank" href="https://www.openbazaar.org/download/">OpenBazaar 2.0 (download)</a>, configure
+                your search provider to be:  <strong>bazaar.dog</strong></p>
+
+
+            <p>like so...</p>
+            <video style="box-shadow: 2px 2px 5px 4px #888888" width="100%" controls>
+                <source src="https://www.bazaar.dog/howto.webm" type="video/webm" autoplay loop>
+                This should be a video showing how to add a search provider, but your browser does not support the video
+                tag.
+            </video>
+
+            <h3>What about finding a good moderator or vendor?</h3>
+            <p>Configure a different search provider to <strong>bazaar.dog/profile/</strong> (note slash at end).</p>
+
+
+            <hr>
+
+            <h3>Hidden Service</h3>
+            <p>The hidden endpoints are
+                <strong>http://obfojhv6ay5fedog.onion</strong> and <strong>http://obfojhv6ay5fedog.onion/profile/</strong>
+            </p>
+
+            <p>Note, although it is a hidden service, the work is being done on a public cloud with a reverse tor
+                proxy. Logging for the hidden workers are turned off, however logs are still made and kept by the cloud
+                provider. That said, I'm not sure that such logs or full access to the reverse proxy or workers would
+                provide an adversary with useful information, given that actual browsing information and order transaction
+                data are never sent to the search providers.</p>
+
+            <p>Search providers are not privy to what is searched for, information is not transmitted regarding which listings are clicked on.</p>
+            <hr>
+            <h1>FAQ</h1>
+            <h3>It's not working, what am I doing wrong?</h3>
+
+            <p>If your profile search looks like the listing search check your tailing slash "/"
+                without it https://bazaar.dog/profile will direct you to listing search. The profile search icon is a guard
+                dog:<img width="42px" src="https://www.bazaar.dog/logo_profile.png" alt="Profile Icon">, the listing search is a fetch dog:
+                <img width="42px" src="https://www.bazaar.dog/logo.png" alt="Logo Icon"></p>
+
+            <p>Also, don't prepend the name with "www", <strong>www.</strong>bazaar.dog is the static site you're currently
+                on.
+            </p>
+
+            <h3>Is this safe to buy things without being scammed?</h3>
+            <p>Well, at the moment known scammers are being removed manually. I think safe would be automatic detection and
+                removal listings with behavior indicative of a scam.</p>
+
+            <p>Be sure to read the scam prevention page from openbazaar: <a target="_blank"
+                                                                            href="https://www.openbazaar.org/scam-prevention/">
+
+                https://www.openbazaar.org/scam-prevention/</a></p>
+
+            <p>Also please read the scam mega-thread on reddit: <a target="_blank"
+                                                                   href="https://www.reddit.com/r/OpenBazaar/comments/7u1e1a/scammer_megathread_information_about_scam/">
+                /r/OpenBazaar/scammer_megathread_information_about_scam/</a>
+            </p>
+
+            <h3>Can I pay you to put my new Antminer store at the top or your results?</h3>
+            No.
+
+            <h3>I found an Antminer using your search engine from a seller with four anonymous ratings, should I buy
+                it?</h3>
+            No.
+
+            <h3>I got scammed trying to buy an Antminer, how can I get my money back?</h3>
+            No.
+
+            <h3>Are you OpenBazaar?</h3>
+            No, nor is this <a href="https://ob1.io/">OB1</a>.
+
+            <h3>Where is your webpage?</h3>
+            Again, this is the webpage for now.
+
+            <h3>Where are the listings?</h3>
+            *Sigh*, I don't see the utility of rewriting a client to browse listings if it would then be impossible to
+            purchase or list anything. If/When ipfs-js and a spv bitcoin wallet can live in the browser or phone, I'm game.
+
+
+            <h3>I wrote another client for OpenBazaar but I can't configure this search provider? or, I want to browse the
+                json from my browser or use it in a project?</h3>
+            The search engine middleware looks for the phrase "OpenBazaar" in the User Agent of the request and passes any
+            request from a non specialized client here. Simply include this string in your user_agent and your request
+            should pass to the API correctly.
+
+            <h3>What is your donation address?</h3>
+            <img src="data:image/gif;base64,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"/>
+            <p>
+                bitcoincash:qzr7k6kyp42xnlg50g3sdzgr0au078fswckqev83sq
+            </p>
+
+        </section>
+        <section class="section parallax bg1">
+
+        </section>
+    </main>
+
+
+</noscript>
 <bazaar-dog-stencil></bazaar-dog-stencil>
 
 
@@ -46,6 +223,7 @@
 <script src="/assets/js/jquery-3.3.1.min.js"></script>
 <script async src="/assets/js/jquery.fancybox.min.js"></script>
 <script src="/assets/localforage.js"></script>
+<script src="/assets/js/bazaar-dog-offline.umd.js"></script>
 
 <script>
     localforage.config({
@@ -56,43 +234,8 @@
         storeName: 'BazaarDogStore', // Should be alphanumeric, with underscores.
         description: 'Private Data for the Bazaar Dog Client'
     });
-
-
-    const initUA = navigator.userAgent;
-    function setUserAgent(window, userAgent) {
-        // Works on Firefox, Chrome, Opera and IE9+
-        if (navigator.__defineGetter__) {
-            navigator.__defineGetter__('userAgent', function () {
-                return userAgent;
-            });
-        } else if (Object.defineProperty) {
-            Object.defineProperty(navigator, 'userAgent', {
-                get: function () {
-                    return userAgent;
-                }
-            });
-        }
-        // Works on Safari
-        if (window.navigator.userAgent !== userAgent) {
-            var userAgentProp = {
-                get: function () {
-                    return userAgent;
-                }
-            };
-            try {
-                Object.defineProperty(window.navigator, 'userAgent', userAgentProp);
-            } catch (e) {
-                window.navigator = Object.create(navigator, {
-                    userAgent: userAgentProp
-                });
-            }
-        }
-    }
-    setUserAgent(window,"BazaarDogStencil-OpenBazaar/0.0.1" );
-    Object.defineProperty(navigator, 'userAgent', {
-            get: function () { return initUA + "BazaarDogStencil-OpenBazaar/0.0.1"; }
-    });
 </script>
+
 </body>
 
 </html>

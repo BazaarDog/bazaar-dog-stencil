@@ -1,22 +1,27 @@
-importScripts('workbox-v3.1.0/workbox-sw.js')
+importScripts('workbox-v3.2.0/workbox-sw.js')
 
 self.workbox.skipWaiting();
 self.workbox.clientsClaim();
 
-importScripts('./assets/ipfs.config.js');
-importScripts('./assets/ipfs.min.js');
-importScripts('./assets/ipfs-postmsg-proxy.2.16.1.js');
+importScripts('./assets/js/bazaar-dog-offline.umd.js');
+importScripts('./assets/js/ipfs.config.js');
+importScripts('./assets/js/ipfs.min.js');
+importScripts('./assets/js/ipfs-postmsg-proxy.2.16.1.js');
 
 
 
-async function getJsonFromUrl() {
-  var query = location.search.substr(1);
-  var result = {};
-  query.split("&").forEach(function(part) {
-    var item = part.split("=");
-    result[item[0]] = decodeURIComponent(item[1]);
-  });
-  return result;
+function getParamFromUrl(uriString) {
+
+    var pos = uriString.indexOf("?");
+    if(pos==-1) return [];
+    var query = uriString.substr(pos+1);
+
+    var result = {};
+    query.split("&").forEach(function(part) {
+        var item = part.split("=");
+        result[item[0]] = decodeURIComponent(item[1]);
+    });
+    return result;
 }
 
 /*
@@ -54,37 +59,43 @@ self.addEventListener('push', (event) => {
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
-
-self.addEventListener('activate', (event) => {
-    console.log('activate step');
+function startIpfs(){
     ipfsconfig.repo =   "BazaarDog-ipfs";
     self.node = new Ipfs(ipfsconfig);
     self.node.on('ready', () => console.log('node is ready...\n\n\n _               _        \n|_) _._  _. _.._| \\ _  _  \n|_)(_|/_(_|(_|| |_/(_)(_| \n                       _| \nusing awesome js-ipfs\n'));
     self.node.on('error', (err) => console.log('js-ipfs node errored\n\n\n####### ######  ######  ####### ######\n#       #     # #     # #     # #     #\n#       #     # #     # #     # #     #\n#####   ######  ######  #     # ######\n#       #   #   #   #   #     # #   #\n#       #    #  #    #  #     # #    #\n####### #     # #     # ####### #     #\n', err));
+}
+
+self.addEventListener('activate', (event) => {
+    console.log('activate step');
+
+    startIpfs();
     event.waitUntil(self.clients.claim());
+
 });
 
 
 self.addEventListener('fetch', (event) => {
-    if (!event.request.url.startsWith(self.location.origin + '/ipfs')) {
-        return console.log('Fetch not in scope', event.request.url);
+    console.log('Handling fetch event for ', event.request.url);
+    if (event.request.url.startsWith(self.location.origin + '/ipfs/')) {
+
+        const multihash = event.request.url.split('/ipfs/')[1];
+        if (self.node !== undefined) {
+            console.log('Handling fetch event for', event.request.url);
+            event.respondWith(catAndRespond(multihash));
+        } else {
+            console.log('FALLBACK!!');
+            fetch("https://gateway.ob1.io/ipfs/" + multihash).then(function (response) {
+                console.log(JSON.stringify(response));
+
+                const headers = { status: 200, statusText: 'OK', headers: {} };
+                event.respondWith(new Response(response, headers));
+            });
+    }
+    }else{
+        return console.log('Fetch not in scope', event.request.url);;
     }
 
-
-
-    const multihash = event.request.url.split('/ipfs/')[1];
-    if(self.node!==undefined) {
-        //console.log('Handling fetch event for', event.request.url);
-        event.respondWith(catAndRespond(multihash));
-    }else {
-        console.log('FALLBACK!!');
-        fetch("https://gateway.ob1.io/ipfs/"+ multihash).then(function(response) {
-console.log(response.content);
-            return response;
-            //const headers = { status: 200, statusText: 'OK', headers: {} };
-            //return new Response(response, headers);
-        });
-    }
 });
 
 async function catAndRespond (hash) {

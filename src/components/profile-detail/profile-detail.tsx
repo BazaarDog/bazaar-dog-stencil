@@ -82,7 +82,7 @@ export class ProfileDetail {
                                             <ion-item >
                                                 <ion-avatar item-start>
                                                     <img
-                                                        src={this.profile ? this.gateway + 'ipfs/' + this.profile.avatarHashes.tiny : '/assets/img/defaultItem.png'}/>
+                                                        src={this.profile ? this.gateway + 'ipfs/' + this.profile.avatarHashes.tiny : '/assets/img/defaultAvatar.png'}/>
                                                 </ion-avatar>
                                                 <hr/>
                                                 <p>{this.profile ? this.profile.location : ''}</p>

@@ -1,58 +1,60 @@
-search-option {
-  ion-item {
+sort-by-dropdown{
+  align-content: end;
+
+  ion-item{
     font-size: 1em;
   }
-  ion-label {
+  ion-label{
     padding-top: 0px;
     padding-bottom: 0px;
   }
-  ion-radio {
+  ion-radio{
     padding-top: 0px;
     padding-bottom: 0px;
   }
 
-  ion-radio input {
+  ion-radio input{
     height: 24px;
     opacity: 0;
   }
 
-  .item {
+  .item{
     padding-left: 5px;
     min-height: 24px;
   }
-  .item-md .radio-md {
+  .item-md .radio-md{
     margin-top: 0px;
     margin-bottom: 0px;
     padding: 0px;
   }
 
-  .label-md {
+  .label-md{
     font-size: .8em;
     margin-top: 0px;
     margin-bottom: 0px;
     padding: 0px;
   }
 
-  .label-ios {
+  .label-ios{
     font-size: .8em;
     margin-top: 0px;
     margin-bottom: 0px;
     padding: 0px;
   }
 
-  .radio-ios {
+  .radio-ios{
     margin-top: 0px;
     margin-bottom: 0px;
     padding: 0px;
   }
 
   .ui.selection.dropdown {
-    min-width: 130px !important;
-    max-width: 165px !important;
+    min-width: 230px !important;
+    max-width: 250px !important;
     padding: 3px;
-    .menu .item {
-      padding-left: 5px !important;
-      padding-right: 5px !important;
+    label{
+      padding-left: 15px !important;
+      padding-top: 8px !important;
     }
   }
 }
